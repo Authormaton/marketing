@@ -41,7 +41,7 @@ export default function Home() {
       {/* Features Section */}
       <section
         id="features"
-        className="flex-1 w-full max-w-5xl mx-auto py-16 px-4 grid gap-12 sm:grid-cols-3"
+        className="scroll-mt-24 flex-1 w-full max-w-5xl mx-auto py-16 px-4 grid gap-12 sm:grid-cols-3"
       >
         <div className="flex flex-col items-center text-center">
           <Image
@@ -93,7 +93,10 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="w-full py-8 px-4 bg-gray-100 dark:bg-gray-900 text-center text-gray-500 dark:text-gray-400 mt-auto">
+      <footer
+        id="contact"
+        className="scroll-mt-24 w-full py-8 px-4 bg-gray-100 dark:bg-gray-900 text-center text-gray-500 dark:text-gray-400 mt-auto"
+      >
         &copy; {new Date().getFullYear()} Your Company. All rights reserved.
       </footer>
     </div>
