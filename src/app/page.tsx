@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ContentCrisis from "./components/ContentCrisis";
 
 export default function Home() {
   return (
@@ -65,6 +66,7 @@ export default function Home() {
           Get Started
         </a>
       </header>
+      <ContentCrisis />
 
       {/* Features Section */}
       <section
