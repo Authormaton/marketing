@@ -1,45 +1,17 @@
 import Image from "next/image";
+import HeroHeader from "./components/HeroHeader";
+import Navigation from "./components/Navigation";
+import WorkflowDiagram from "./components/WorkflowDiagram";
 
 export default function Home() {
   return (
     <div className="font-sans min-h-screen flex flex-col bg-white dark:bg-gray-950">
-      {/* Sticky Menu */}
-      <nav className="sticky top-0 z-50 w-full bg-white/90 dark:bg-gray-950/90 backdrop-blur border-b border-gray-200 dark:border-gray-800 shadow-sm">
-        <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/next.svg"
-              alt="Logo"
-              width={36}
-              height={36}
-              className="dark:invert"
-            />
-            <span className="font-bold text-lg text-gray-900 dark:text-white">
-              Brand
-            </span>
-          </div>
-          <div className="flex gap-6">
-            <a
-              href="#"
-              className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-            >
-              Home
-            </a>
-            <a
-              href="#features"
-              className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-            >
-              Features
-            </a>
-            <a
-              href="#contact"
-              className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-            >
-              Contact
-            </a>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
+
+      <div className="bg-gradient-to-b from-[#18122B] to-[#1A1A2E] ">
+        <HeroHeader />
+        <WorkflowDiagram />
+      </div>
 
       {/* Hero Section */}
       <header className="w-full py-16 px-4 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 flex flex-col items-center text-center">
