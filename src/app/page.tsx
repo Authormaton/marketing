@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ContentCrisis from "./components/ContentCrisis";
 import HeroHeader from "./components/HeroHeader";
 import Navigation from "./components/Navigation";
 import WorkflowDiagram from "./components/WorkflowDiagram";
@@ -37,6 +38,7 @@ export default function Home() {
           Get Started
         </a>
       </header>
+      <ContentCrisis />
 
       {/* Features Section */}
       <section
