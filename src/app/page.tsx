@@ -3,15 +3,17 @@ import ContentCrisis from "./components/ContentCrisis";
 import HeroHeader from "./components/HeroHeader";
 import Navigation from "./components/Navigation";
 import WorkflowDiagram from "./components/WorkflowDiagram";
+ import WritingDemo from "./components/WritingDemo";
 
 export default function Home() {
   return (
     <div className="font-sans min-h-screen flex flex-col bg-white dark:bg-gray-950">
       <Navigation />
 
-      <div className="bg-gradient-to-b from-[#18122B] to-[#1A1A2E] ">
+      <div className="bg-gradient-to-b from-[#18122B] to-[#1A1A2E]">
         <HeroHeader />
         <WorkflowDiagram />
+        <WritingDemo />
       </div>
 
       {/* Hero Section */}
