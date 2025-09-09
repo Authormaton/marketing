@@ -1,18 +1,26 @@
 import Image from "next/image";
+
 import ContentCrisis from "./components/ContentCrisis";
 import Features from "./components/Features";
 import HeroHeader from "./components/HeroHeader";
 import Navigation from "./components/Navigation";
 import WorkflowDiagram from "./components/WorkflowDiagram";
+import KnowledgeTransform from "./components/KnowledgeTransform";
+
 
 export default function Home() {
   return (
     <div className="font-sans min-h-screen flex flex-col bg-white dark:bg-gray-950">
+
       <Navigation />
+
 
       <div className="bg-gradient-to-b from-[#18122B] to-[#1A1A2E] ">
         <HeroHeader />
         <WorkflowDiagram />
+
+        <KnowledgeTransform/>
+
       </div>
 
       {/* Hero Section */}
