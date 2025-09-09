@@ -5,7 +5,11 @@ import Features from "./components/Features";
 import HeroHeader from "./components/HeroHeader";
 import Navigation from "./components/Navigation";
 import WorkflowDiagram from "./components/WorkflowDiagram";
+
+ import WritingDemo from "./components/WritingDemo";
+
 import KnowledgeTransform from "./components/KnowledgeTransform";
+
 
 
 export default function Home() {
@@ -18,8 +22,9 @@ export default function Home() {
       <div className="bg-gradient-to-b from-[#18122B] to-[#1A1A2E] ">
         <HeroHeader />
         <WorkflowDiagram />
-
+ <WritingDemo />
         <KnowledgeTransform/>
+
 
       </div>
 
