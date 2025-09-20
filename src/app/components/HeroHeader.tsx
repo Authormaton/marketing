@@ -1,6 +1,8 @@
+import WorkflowDiagram from "./WorkflowDiagram";
+
 export default function HeroHeader() {
   return (
-    <div className="w-full flex flex-col items-center justify-center py-16 px-4 relative overflow-hidden">
+    <div className="w-full flex flex-col items-center justify-center py-10 px-4 relative overflow-hidden">
       {/* Background image */}
       <img
         src="/bg.png"
@@ -17,6 +19,7 @@ export default function HeroHeader() {
         Harness agentic AI to automate expert-level writing and research with
         unprecedented accuracy in the decentralized web space.
       </p>
+      <WorkflowDiagram/>
     </div>
   );
 }
