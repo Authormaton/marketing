@@ -16,7 +16,6 @@ export default function Home() {
     <div className="font-sans min-h-screen flex flex-col bg-white dark:bg-gray-950">
       <Navigation />
       <HeroHeader />
-      <WorkflowDiagram />
       <ContentCrisis />
       <Features />
       <KnowledgeTransform />
