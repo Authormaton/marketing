@@ -36,7 +36,7 @@ We welcome contributions that help advance technical content automation. Please 
 
 ## License
 
-This repository is licensed under the MIT License. See `LICENSE` for details.
+This repository is licensed under the GNU GENERAL PUBLIC LICENSE. See `LICENSE` for details.
 
 ## Learn More
 
