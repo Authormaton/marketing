@@ -1,6 +1,6 @@
 import WorkflowDiagram from "./WorkflowDiagram";
 
-export default function HeroHeader() {
+export default function Hero() {
   return (
     <div className="w-full flex flex-col items-center justify-center py-10 px-4 relative overflow-hidden">
       {/* Background image */}

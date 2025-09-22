@@ -1,21 +1,16 @@
 
 import ContentCrisis from "../components/ContentCrisis";
 import Features from "../components/Features";
-import HeroHeader from "../components/HeroHeader";
+import Hero from "@/components/sections/hero/Hero";
 import Navigation from "../components/Navigation";
-import WorkflowDiagram from "../components/WorkflowDiagram";
-
 import WritingDemo from "../components/WritingDemo";
-
 import KnowledgeTransform from "../components/KnowledgeTransform";
-
-
 
 export default function Home() {
   return (
-    <div className="font-sans min-h-screen flex flex-col bg-white dark:bg-gray-950">
+    <div className="flex flex-col">
       <Navigation />
-      <HeroHeader />
+      <Hero />
       <ContentCrisis />
       <Features />
       <KnowledgeTransform />
