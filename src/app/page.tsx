@@ -1,13 +1,13 @@
 
-import ContentCrisis from "./components/ContentCrisis";
-import Features from "./components/Features";
-import HeroHeader from "./components/HeroHeader";
-import Navigation from "./components/Navigation";
-import WorkflowDiagram from "./components/WorkflowDiagram";
+import ContentCrisis from "../components/ContentCrisis";
+import Features from "../components/Features";
+import HeroHeader from "../components/HeroHeader";
+import Navigation from "../components/Navigation";
+import WorkflowDiagram from "../components/WorkflowDiagram";
 
-import WritingDemo from "./components/WritingDemo";
+import WritingDemo from "../components/WritingDemo";
 
-import KnowledgeTransform from "./components/KnowledgeTransform";
+import KnowledgeTransform from "../components/KnowledgeTransform";
 
 
 
