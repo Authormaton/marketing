@@ -1,10 +1,12 @@
 
+
 import ContentCrisis from "../components/ContentCrisis";
 import Features from "../components/Features";
 import Hero from "@/components/sections/hero/Hero";
 import Navigation from "@/components/common/Navigation";
 import WritingDemo from "../components/WritingDemo";
 import KnowledgeTransform from "../components/KnowledgeTransform";
+import Footer from "@/components/common/Footer";
 
 export default function Home() {
   return (
@@ -15,12 +17,7 @@ export default function Home() {
       <Features />
       <KnowledgeTransform />
       <WritingDemo />
-      <footer
-        id="contact"
-        className="scroll-mt-24 w-full py-8 px-4 bg-gray-100 dark:bg-gray-900 text-center text-gray-500 dark:text-gray-400 mt-auto"
-      >
-        &copy; {new Date().getFullYear()} Your Company. All rights reserved.
-      </footer>
+      <Footer />
     </div>
   );
 }
