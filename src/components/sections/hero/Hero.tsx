@@ -2,12 +2,11 @@ import WorkflowDiagram from "./WorkflowDiagram";
 
 export default function Hero() {
   return (
-    <div className="w-full flex flex-col items-center justify-center py-10 px-4 relative overflow-hidden">
-      {/* Background image */}
+    <div className="w-full flex flex-col items-center justify-center pt-20 pb-5 px-4 relative overflow-hidden">
       <img
         src="/bg.png"
         alt="Background"
-        className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 pointer-events-none select-none"
+        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
         aria-hidden="true"
       />
       <h2 className="relative z-10 text-5xl md:text-7xl font-extrabold text-center mb-6 bg-gradient-to-r from-blue-400 via-cyan-300 to-pink-400 bg-clip-text text-transparent drop-shadow-xl">

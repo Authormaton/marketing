@@ -37,7 +37,7 @@ export default function WorkflowDiagram() {
   return (
     <div className="w-full flex flex-col items-center py-4 px-4">
       <div className="flex flex-col items-center justify-center gap-8 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-inner">
-        <div className="text-3xl py-2 font-bold">
+        <div className="text-3xl py-2 font-bold text-white">
           Multi Agent Workflow
         </div>
         <div className="flex flex-row items-center justify-center gap-8">

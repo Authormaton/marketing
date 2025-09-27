@@ -2,13 +2,13 @@
 import ContentCrisis from "../components/ContentCrisis";
 import Features from "../components/Features";
 import Hero from "@/components/sections/hero/Hero";
-import Navigation from "../components/Navigation";
+import Navigation from "@/components/common/Navigation";
 import WritingDemo from "../components/WritingDemo";
 import KnowledgeTransform from "../components/KnowledgeTransform";
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
+    <div>
       <Navigation />
       <Hero />
       <ContentCrisis />
