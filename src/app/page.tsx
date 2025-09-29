@@ -1,6 +1,6 @@
 
 
-import ContentCrisis from "../components/ContentCrisis";
+import ContentCrisis from "../components/sections/content-crisis/ContentCrisis";
 import Features from "../components/Features";
 import Hero from "@/components/sections/hero/Hero";
 import Navigation from "@/components/common/Navigation";
@@ -10,7 +10,7 @@ import Footer from "@/components/common/Footer";
 
 export default function Home() {
   return (
-    <div>
+    <div className="bg-black">
       <Navigation />
       <Hero />
       <ContentCrisis />
