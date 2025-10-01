@@ -1,7 +1,7 @@
 
 
 import ContentCrisis from "../components/sections/content-crisis/ContentCrisis";
-import Features from "../components/Features";
+import Features from "../components/sections/features/Features";
 import Hero from "@/components/sections/hero/Hero";
 import Navigation from "@/components/common/Navigation";
 import WritingDemo from "../components/WritingDemo";
