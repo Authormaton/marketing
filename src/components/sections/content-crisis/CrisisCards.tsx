@@ -1,7 +1,8 @@
+import type { ReactNode } from "react";
 import { FragmentedKnowledgeIcon, ExpertBottlenecksIcon, QualityInconsistencyIcon, TimeIntensiveProcessIcon } from "./CrisisIcons";
 
 interface CrisisCardProps {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
 }
