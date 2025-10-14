@@ -44,7 +44,16 @@
 }
 
 :root {
+  --font-size-base: 1.125rem; /* 18px */
+  --space-xxs: 0.25rem; /* 4px */
+  --space-xs: 0.5rem; /* 8px */
+  --space-sm: 0.75rem; /* 12px */
+  --space-md: 1rem; /* 16px */
+  --space-lg: 1.5rem; /* 24px */
+  --space-xl: 2rem; /* 32px */
+  --space-xxl: 3rem; /* 48px */
   --radius: 0.625rem;
+}
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -117,6 +126,20 @@
     @apply border-border outline-ring/50;
   }
   body {
+    font-size: clamp(1rem, 0.925rem + 0.375vw, var(--font-size-base));
     @apply bg-background text-foreground;
+  }
+
+  /*
+   * Add a small utility to allow us to style things with focus-visible
+   * when we don't have access to the element itself, like with Radix UI's Slot.
+   */
+  .focus-visible {
+    @apply outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    @apply outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring;
   }
 }
