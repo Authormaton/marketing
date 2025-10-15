@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
     >
       <div className="flex flex-col items-center gap-2">
         <span className="text-base font-medium text-gray-300">
-          &copy; {new Date().getFullYear()} Your Company. All rights reserved.
+          &copy; {new Date().getFullYear()} Authormaton. All rights reserved.
         </span>
         <nav className="flex gap-4 mt-2">
           <a
