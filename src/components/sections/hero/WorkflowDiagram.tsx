@@ -34,9 +34,19 @@ const steps = [
 const arrows = ["text-purple-400", "text-cyan-300", "text-pink-400"];
 
 export default function WorkflowDiagram() {
+  const titleId = "workflow-diagram-title";
+  const descId = "workflow-diagram-desc";
+
   return (
     <div className="w-full flex flex-col items-center py-4 px-4">
-      <div className="flex flex-col items-center justify-center gap-8 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-inner">
+      <div
+        className="flex flex-col items-center justify-center gap-8 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-inner"
+        role="img"
+        aria-labelledby={titleId}
+        aria-describedby={descId}
+      >
+        <h1 id={titleId} className="sr-only">Multi Agent Workflow Diagram</h1>
+        <p id={descId} className="sr-only">A multi-agent workflow illustrating the steps from research to expert content. It starts with a Research Agent, followed by an Analysis Agent, then a Writing Agent, culminating in Expert Content.</p>
         <div className="text-3xl py-2 font-bold text-white">
           Multi Agent Workflow
         </div>
@@ -47,7 +57,9 @@ export default function WorkflowDiagram() {
                 className={`flex flex-col items-center justify-center gap-2 ${step.bgClass} rounded-xl p-4 min-w-[110px]`}
               >
                 <div className="flex items-center justify-center w-12 h-12">
-                  {step.icon}
+                  {/* Icons are decorative, their meaning is conveyed by the label */}
+                  {/* @ts-ignore */}
+                  {<step.icon aria-hidden="true" />}
                 </div>
                 <span
                   className={`text-sm font-medium text-center ${step.textClass}`}
@@ -56,7 +68,7 @@ export default function WorkflowDiagram() {
                 </span>
               </div>
               {idx < arrows.length && (
-                <span className={`text-3xl ${arrows[idx]}`}>→</span>
+                <span className={`text-3xl ${arrows[idx]}`} aria-hidden="true">→</span>
               )}
             </div>
           ))}
@@ -65,3 +77,21 @@ export default function WorkflowDiagram() {
     </div>
   );
 }
+
+// sr-only utility class for visually hidden elements but available to screen readers
+const SrOnly = () => (
+  <style jsx global>{`
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+  `}</style>
+);
+
