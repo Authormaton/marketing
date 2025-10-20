@@ -9,7 +9,7 @@ interface CrisisCardProps {
 
 export function CrisisCard({ icon, title, description }: CrisisCardProps) {
   return (
-    <div className="bg-[#121225] p-6 rounded-lg border border-[#252542] shadow-lg">
+    <div className="min-w-[280px] bg-[#121225] p-6 rounded-lg border border-[#252542] shadow-lg flex-grow">
       <div className="bg-[#18162A] w-16 h-16 rounded-lg flex items-center justify-center mb-6">
         {icon}
       </div>
@@ -21,7 +21,7 @@ export function CrisisCard({ icon, title, description }: CrisisCardProps) {
 
 export function CrisisCardsGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="flex flex-wrap justify-center gap-6">
       <CrisisCard
         icon={<FragmentedKnowledgeIcon className="w-8 h-8 text-red-500" />}
         title="Fragmented Knowledge"
