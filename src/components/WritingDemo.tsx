@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 
-const WritingDemo = () => {
+const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
     {
@@ -39,28 +39,53 @@ const WritingDemo = () => {
         Human-Quality Writing Demo
       </h2>
       <div className="relative bg-black/40 rounded-3xl p-8 overflow-hidden shadow-[0_0_30px_rgba(139,92,246,0.1)]">
-        {/* Robot Avatar */}
-        <div className="w-full h-24 bg-black/60 rounded-xl mb-8 flex items-center justify-center">
-          <div className="text-4xl">{slides[currentSlide].robotEmoji}</div>
-        </div>
+        {loading ? (
+          <div className="animate-pulse" aria-busy="true" role="progressbar">
+            {/* Skeleton for Robot Avatar */}
+            <div className="w-full h-24 bg-gray-700 rounded-xl mb-8"></div>
 
-        {/* Writing Demo */}
-        <div className="flex items-center gap-3 text-lg">
-          <div className="text-2xl">{slides[currentSlide].robotEmoji}</div>
-          <div className="text-gray-400">→</div>
-          <div className="text-2xl">{slides[currentSlide].documentEmoji}</div>
-          <div className="text-gray-300 font-mono">{slides[currentSlide].text}</div>
-        </div>
+            {/* Skeleton for Writing Demo Text */}
+            <div className="flex items-center gap-3 text-lg">
+              <div className="w-8 h-8 bg-gray-700 rounded-full"></div>
+              <div className="w-4 h-1 bg-gray-700 rounded-full"></div>
+              <div className="w-8 h-8 bg-gray-700 rounded-full"></div>
+              <div className="h-4 bg-gray-700 rounded w-3/4"></div>
+            </div>
 
-        {/* Slide Indicators */}
-        <div className="flex justify-center gap-2 mt-8">
-          {slides.map((_, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full transition-colors duration-300 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
-            />
-          ))}
-        </div>
+            {/* Skeleton for Slide Indicators */}
+            <div className="flex justify-center gap-2 mt-8">
+              <div className="w-2 h-2 rounded-full bg-gray-700"></div>
+              <div className="w-2 h-2 rounded-full bg-gray-700"></div>
+              <div className="w-2 h-2 rounded-full bg-gray-700"></div>
+              <div className="w-2 h-2 rounded-full bg-gray-700"></div>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Robot Avatar */}
+            <div className="w-full h-24 bg-black/60 rounded-xl mb-8 flex items-center justify-center">
+              <div className="text-4xl">{slides[currentSlide].robotEmoji}</div>
+            </div>
+
+            {/* Writing Demo */}
+            <div className="flex items-center gap-3 text-lg">
+              <div className="text-2xl">{slides[currentSlide].robotEmoji}</div>
+              <div className="text-gray-400">→</div>
+              <div className="text-2xl">{slides[currentSlide].documentEmoji}</div>
+              <div className="text-gray-300 font-mono">{slides[currentSlide].text}</div>
+            </div>
+
+            {/* Slide Indicators */}
+            <div className="flex justify-center gap-2 mt-8">
+              {slides.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-colors duration-300 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
