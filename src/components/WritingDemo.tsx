@@ -5,6 +5,13 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  const slides: {robotEmoji: string; documentEmoji: string; text: string;}[] = [
+    { robotEmoji: '🤖', documentEmoji: '📝', text: 'Technical whitepaper generated with blockchain-specific expertise' },
+    { robotEmoji: '🤖', documentEmoji: '📊', text: 'Market analysis report with data-driven insights' },
+    { robotEmoji: '🤖', documentEmoji: '📱', text: 'Product documentation with technical accuracy' },
+    { robotEmoji: '🤖', documentEmoji: '📈', text: 'Research paper with comprehensive citations' }
+  ];
+
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {

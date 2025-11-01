@@ -53,7 +53,6 @@
   --space-xl: 2rem; /* 32px */
   --space-xxl: 3rem; /* 48px */
   --radius: 0.625rem;
-}
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
