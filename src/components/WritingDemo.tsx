@@ -78,9 +78,19 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             {/* Slide Indicators */}
             <div className="flex justify-center gap-2 mt-8">
               {slides.map((_, index) => (
-                <div
+                <button
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-colors duration-300 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
+                  type="button"
+                  role="tab"
+                  aria-label={`Go to slide ${index + 1}`}
+                  aria-current={index === currentSlide ? 'true' : 'false'}
+                  onClick={() => setCurrentSlide(index)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      setCurrentSlide(index);
+                    }
+                  }}
+                  className={`w-2 h-2 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
                 />
               ))}
             </div>
