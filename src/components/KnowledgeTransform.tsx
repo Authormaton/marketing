@@ -6,13 +6,16 @@ import React from "react";
  * This component displays a visual representation of transforming fragmented knowledge into unified intelligence.
  * It does not take any input props and does not return any specific output.
  */
-interface KnowledgeTransformProps {}
+interface KnowledgeTransformProps {
+  title?: string;
+}
 
-const KnowledgeTransform: React.FC<KnowledgeTransformProps> = () => {
+const KnowledgeTransform: React.FC<KnowledgeTransformProps> = ({ title }) => {
+  const displayTitle = title || "Transforming Knowledge into Intelligence";
   return (
     <section className="relative w-full max-w-5xl mx-auto p-8 bg-gradient-to-br from-gray-900 via-black to-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-purple-700/30">
       <h2 className="text-3xl md:text-4xl font-bold text-center text-purple-300 mb-8 tracking-tight drop-shadow-lg">
-        Transforming Knowledge into Intelligence
+        {displayTitle}
       </h2>
       <div className="flex flex-col md:flex-row items-center justify-between gap-12">
         {/* Fragmented Knowledge */}
