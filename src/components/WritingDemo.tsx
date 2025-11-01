@@ -1,36 +1,44 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [
-    {
-      robotEmoji: "🤖",
-      documentEmoji: "📝",
-      text: "Technical whitepaper generated with blockchain-specific expertise"
-    },
-    {
-      robotEmoji: "🤖",
-      documentEmoji: "📊",
-      text: "Market analysis report with data-driven insights"
-    },
-    {
-      robotEmoji: "🤖",
-      documentEmoji: "📱",
-      text: "Product documentation with technical accuracy"
-    },
-    {
-      robotEmoji: "🤖",
-      documentEmoji: "📈",
-      text: "Research paper with comprehensive citations"
+  const [isPaused, setIsPaused] = useState(false);
+
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const scheduleResume = () => {
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
     }
+
+    resumeTimeoutRef.current = window.setTimeout(() => {
+      setIsPaused(false);
+      resumeTimeoutRef.current = null;
+    }, 10000);
+  };
+
+  const slides: {robotEmoji: string; documentEmoji: string; text: string;}[] = [
+    { robotEmoji: '🤖', documentEmoji: '📝', text: 'Technical whitepaper generated with blockchain-specific expertise' },
+    { robotEmoji: '🤖', documentEmoji: '📊', text: 'Market analysis report with data-driven insights' },
+    { robotEmoji: '🤖', documentEmoji: '📱', text: 'Product documentation with technical accuracy' },
+    { robotEmoji: '🤖', documentEmoji: '📈', text: 'Research paper with comprehensive citations' }
   ];
 
   useEffect(() => {
+    if (isPaused) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 3000);
     return () => clearInterval(timer);
+  }, [isPaused, slides.length]);
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current) {
+        clearTimeout(resumeTimeoutRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -76,11 +84,19 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             </div>
 
             {/* Slide Indicators */}
-            <div className="flex justify-center gap-2 mt-8">
+            <div className="flex justify-center gap-2 mt-8" role="group" aria-label="Slide indicators">
               {slides.map((_, index) => (
-                <div
+                <button
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-colors duration-300 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
+                  type="button"
+                  aria-label={`Go to slide ${index + 1}`}
+                  aria-current={index === currentSlide ? 'true' : undefined}
+                  onClick={() => {
+                    setCurrentSlide(index);
+                    setIsPaused(true);
+                    scheduleResume();
+                  }}
+                  className={`w-2 h-2 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
                 />
               ))}
             </div>

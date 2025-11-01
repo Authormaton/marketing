@@ -26,4 +26,6 @@ const FeatureCard: React.FC<FeatureCardProps> = React.memo(({ icon, title, subti
   );
 });
 
+FeatureCard.displayName = 'FeatureCard';
+
 export default FeatureCard;

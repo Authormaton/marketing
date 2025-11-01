@@ -1,4 +1,7 @@
-import WorkflowDiagram from "./WorkflowDiagram";
+'use client'
+import dynamic from 'next/dynamic';
+
+const WorkflowDiagram = dynamic(() => import('./WorkflowDiagram'), { ssr: false });
 
 export default function Hero() {
   return (

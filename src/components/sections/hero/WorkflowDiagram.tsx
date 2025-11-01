@@ -1,3 +1,4 @@
+'use client'
 import { FileSearch, BarChart3, PenTool, BookOpen } from "lucide-react";
 
 const steps = [
@@ -58,7 +59,7 @@ export default function WorkflowDiagram() {
               >
                 <div className="flex items-center justify-center w-12 h-12">
                   {/* Icons are decorative, their meaning is conveyed by the label */}
-                  {/* @ts-ignore */}
+                  {/* @ts-expect-error: Lucide-react icons are not perfectly typed for direct component usage */}
                   {<step.icon aria-hidden="true" />}
                 </div>
                 <span
@@ -78,20 +79,4 @@ export default function WorkflowDiagram() {
   );
 }
 
-// sr-only utility class for visually hidden elements but available to screen readers
-const SrOnly = () => (
-  <style jsx global>{`
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border-width: 0;
-    }
-  `}</style>
-);
 
