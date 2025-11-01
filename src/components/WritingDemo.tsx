@@ -1,9 +1,22 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const scheduleResume = () => {
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+    }
+
+    resumeTimeoutRef.current = window.setTimeout(() => {
+      setIsPaused(false);
+      resumeTimeoutRef.current = null;
+    }, 10000);
+  };
 
   const slides: {robotEmoji: string; documentEmoji: string; text: string;}[] = [
     { robotEmoji: '🤖', documentEmoji: '📝', text: 'Technical whitepaper generated with blockchain-specific expertise' },
@@ -19,6 +32,14 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
     }, 3000);
     return () => clearInterval(timer);
   }, [isPaused, slides.length]);
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current) {
+        clearTimeout(resumeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="w-full max-w-4xl mx-auto px-6 py-12">
@@ -73,7 +94,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
                   onClick={() => {
                     setCurrentSlide(index);
                     setIsPaused(true);
-                    setTimeout(() => setIsPaused(false), 10000);
+                    scheduleResume();
                   }}
                   className={`w-2 h-2 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
                 />
