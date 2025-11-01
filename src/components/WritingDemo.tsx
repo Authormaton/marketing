@@ -3,35 +3,15 @@ import React, { useState, useEffect } from 'react';
 
 const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [
-    {
-      robotEmoji: "🤖",
-      documentEmoji: "📝",
-      text: "Technical whitepaper generated with blockchain-specific expertise"
-    },
-    {
-      robotEmoji: "🤖",
-      documentEmoji: "📊",
-      text: "Market analysis report with data-driven insights"
-    },
-    {
-      robotEmoji: "🤖",
-      documentEmoji: "📱",
-      text: "Product documentation with technical accuracy"
-    },
-    {
-      robotEmoji: "🤖",
-      documentEmoji: "📈",
-      text: "Research paper with comprehensive citations"
-    }
-  ];
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    if (isPaused) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 3000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isPaused, slides.length]);
 
   return (
     <div className="w-full max-w-4xl mx-auto px-6 py-12">
@@ -76,19 +56,17 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             </div>
 
             {/* Slide Indicators */}
-            <div className="flex justify-center gap-2 mt-8">
+            <div className="flex justify-center gap-2 mt-8" role="group" aria-label="Slide indicators">
               {slides.map((_, index) => (
                 <button
                   key={index}
                   type="button"
-                  role="tab"
                   aria-label={`Go to slide ${index + 1}`}
-                  aria-current={index === currentSlide ? 'true' : 'false'}
-                  onClick={() => setCurrentSlide(index)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setCurrentSlide(index);
-                    }
+                  aria-current={index === currentSlide ? 'true' : undefined}
+                  onClick={() => {
+                    setCurrentSlide(index);
+                    setIsPaused(true);
+                    setTimeout(() => setIsPaused(false), 10000);
                   }}
                   className={`w-2 h-2 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
                 />
