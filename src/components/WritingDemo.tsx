@@ -5,7 +5,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resumeTimeoutRef = useRef<number | null>(null);
 
   const scheduleResume = () => {
     if (resumeTimeoutRef.current) {
