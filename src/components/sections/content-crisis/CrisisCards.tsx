@@ -9,7 +9,7 @@ interface CrisisCardProps {
 
 export function CrisisCard({ icon, title, description }: CrisisCardProps) {
   return (
-    <div className="w-full sm:min-w-[280px] bg-[#121225] p-6 rounded-lg border border-[#252542] shadow-lg flex-grow">
+    <div className="w-full sm:w-auto sm:min-w-[280px] bg-[#121225] p-6 rounded-lg border border-[#252542] shadow-lg flex-grow">
       <div className="bg-[#18162A] w-16 h-16 rounded-lg flex items-center justify-center mb-6">
         {icon}
       </div>
