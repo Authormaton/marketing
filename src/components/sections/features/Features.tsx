@@ -9,8 +9,9 @@ const Features = () => {
         {features.map((feature, index) => (
           <FeatureCard
             key={index}
-            imageSrc={feature.icon}
-            imageAlt={feature.title}
+            imageSrc={feature.imageSrc}
+            imageAlt={feature.imageAlt || feature.title}
+            icon={feature.icon}
             title={feature.title}
             subtitle={feature.subtitle}
             description={feature.description}
