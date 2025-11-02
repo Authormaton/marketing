@@ -1,7 +1,10 @@
 'use client'
 import dynamic from 'next/dynamic';
 
-const WorkflowDiagram = dynamic(() => import('./WorkflowDiagram'), { ssr: false });
+const WorkflowDiagram = dynamic(() => import('./WorkflowDiagram'), {
+  ssr: false,
+  loading: () => <div className="text-white">Loading workflow diagram...</div>,
+});
 
 export default function Hero() {
   return (
