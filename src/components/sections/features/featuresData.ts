@@ -1,12 +1,21 @@
 // src/components/sections/features/featuresData.ts
-export interface Feature {
-  icon?: string;
-  imageSrc?: string;
-  imageAlt?: string;
-  title: string;
-  subtitle: string;
-  description: string;
-}
+export type Feature =
+  | {
+      icon: string;
+      imageSrc?: never;
+      imageAlt?: never;
+      title: string;
+      subtitle: string;
+      description: string;
+    }
+  | {
+      icon?: never;
+      imageSrc: string;
+      imageAlt: string;
+      title: string;
+      subtitle: string;
+      description: string;
+    };
 
 export const features: Feature[] = [
   {
