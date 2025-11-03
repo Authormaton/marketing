@@ -16,6 +16,10 @@ describe('classNames', () => {
   it('should filter out falsy values', () => {
     expect(classNames('a', null, undefined, '', 0, 'b')).toBe('a b');
   });
+
+  it('should return an empty string when no arguments are provided', () => {
+    expect(classNames()).toBe('');
+  });
 });
 
 describe('formatYear', () => {
