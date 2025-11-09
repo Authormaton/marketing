@@ -40,9 +40,9 @@ class ErrorBoundary extends Component<Props, State> {
   private handleRetry = () => {
     if (this.state.retryCount >= this.RETRY_THRESHOLD) {
       this.setState((prevState) => ({
-        hasError: false,
-        error: null,
-        errorInfo: null,
+        hasError: true, // Keep hasError true to show persistent error message
+        error: null, // Clear error to prevent showing old error details
+        errorInfo: null, // Clear errorInfo
         retryKey: prevState.retryKey + 1,
         retryCount: prevState.retryCount + 1,
       }));
@@ -80,7 +80,8 @@ class ErrorBoundary extends Component<Props, State> {
           )}
           <button
             onClick={this.handleRetry}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out"
+            disabled={this.state.retryCount >= this.RETRY_THRESHOLD}
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Retry
           </button>
