@@ -1,8 +1,38 @@
-import React from "react";
+'use client';
+
+import React, { useState } from "react";
 import { Twitter, Github, Linkedin } from "lucide-react";
 
 const Footer: React.FC = () => {
-  return (
+  const [email, setEmail] = useState('');
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setStatus('loading');
+  
+      try {
+        const response = await fetch('/api/newsletter-subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+  
+        if (response.ok) {
+          setStatus('success');
+          setEmail(''); // Clear email on success
+        } else {
+          setStatus('error');
+        }
+      } catch (error) {
+        console.error('Newsletter subscription error:', error);
+        setStatus('error');
+      }
+    };
+  
+    return (
     <footer
       id="contact"
       className="scroll-mt-24 w-full py-12 px-4 bg-gray-900 text-gray-400 mt-auto border-t border-gray-800 transition-colors duration-300"
@@ -75,20 +105,31 @@ const Footer: React.FC = () => {
           <p className="text-gray-500 text-sm">
             Subscribe to our newsletter for the latest news and updates.
           </p>
-          <form className="flex flex-col sm:flex-row gap-2 mt-2 w-full max-w-sm">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 mt-2 w-full max-w-sm">
             <input
               type="email"
               placeholder="Your email address"
               aria-label="Email for newsletter"
-              className="flex-grow px-4 py-2 rounded-md bg-gray-800 border border-gray-700 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={status === 'loading'}
+              className="flex-grow px-4 py-2 rounded-md bg-gray-800 border border-gray-700 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+              disabled={status === 'loading'}
+              className="px-4 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Subscribe
+              {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
             </button>
           </form>
+          {status === 'success' && (
+            <p className="text-green-500 text-sm mt-2">Successfully subscribed!</p>
+          )}
+          {status === 'error' && (
+            <p className="text-red-500 text-sm mt-2">Subscription failed. Please try again.</p>
+          )}
         </div>
       </div>
     </footer>
