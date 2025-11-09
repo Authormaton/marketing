@@ -1,3 +1,5 @@
+'use client';
+
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -6,11 +8,19 @@ interface Props {
 
 interface State {
   hasError: boolean;
+  error: Error | null;
+  errorInfo: ErrorInfo | null;
+  retryKey: number;
+  retryCount: number;
 }
 
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
-    hasError: false
+    hasError: false,
+    error: null,
+    errorInfo: null,
+    retryKey: 0,
+    retryCount: 0,
   };
 
   public static getDerivedStateFromError(_: Error): State {
@@ -20,12 +30,27 @@ class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
+    this.setState({ error, errorInfo });
     // Here you would typically log the error to an error reporting service
     // logErrorToMyService(error, errorInfo);
   }
 
   private handleRetry = () => {
-    this.setState({ hasError: false });
+    const RETRY_THRESHOLD = 3;
+    if (this.state.retryCount >= RETRY_THRESHOLD) {
+      // If retry threshold exceeded, show a message or trigger a page reload
+      alert("Persistent error detected. Please refresh the page or contact support.");
+      window.location.reload();
+      return;
+    }
+
+    this.setState((prevState) => ({
+      hasError: false,
+      error: null,
+      errorInfo: null,
+      retryKey: prevState.retryKey + 1,
+      retryCount: prevState.retryCount + 1,
+    }));
   };
 
   public render() {
@@ -46,7 +71,7 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    return this.props.children;
+    return <div key={this.state.retryKey}>{this.props.children}</div>;
   }
 }
 
