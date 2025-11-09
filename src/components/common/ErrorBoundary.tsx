@@ -23,7 +23,9 @@ class ErrorBoundary extends Component<Props, State> {
     retryCount: 0,
   };
 
-  public static getDerivedStateFromError(_: Error): State {
+  private readonly RETRY_THRESHOLD = 3;
+
+  public static getDerivedStateFromError(_: Error): Partial<State> {
     // Update state so the next render shows the fallback UI.
     return { hasError: true };
   }
@@ -36,11 +38,15 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   private handleRetry = () => {
-    const RETRY_THRESHOLD = 3;
-    if (this.state.retryCount >= RETRY_THRESHOLD) {
-      // If retry threshold exceeded, show a message or trigger a page reload
-      alert("Persistent error detected. Please refresh the page or contact support.");
-      window.location.reload();
+    if (this.state.retryCount >= this.RETRY_THRESHOLD) {
+      this.setState((prevState) => ({
+        hasError: false,
+        error: null,
+        errorInfo: null,
+        retryKey: prevState.retryKey + 1,
+        retryCount: prevState.retryCount + 1,
+      }));
+      setTimeout(() => window.location.reload(), 3000);
       return;
     }
 
@@ -58,9 +64,20 @@ class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4">
           <h1 className="text-4xl font-bold mb-4">Oops! Something went wrong.</h1>
-          <p className="text-lg text-center mb-6">
-            We apologize for the inconvenience. Please try again.
-          </p>
+          {this.state.retryCount >= this.RETRY_THRESHOLD ? (
+            <>
+              <p className="text-lg text-center mb-6">
+                Persistent error detected. The page will reload automatically.
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                If the problem persists, please contact support.
+              </p>
+            </>
+          ) : (
+            <p className="text-lg text-center mb-6">
+              We apologize for the inconvenience. Please try again.
+            </p>
+          )}
           <button
             onClick={this.handleRetry}
             className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out"
