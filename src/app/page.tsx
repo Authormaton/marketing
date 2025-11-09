@@ -1,5 +1,3 @@
-
-
 import ContentCrisis from "../components/sections/content-crisis/ContentCrisis";
 import Features from "../components/sections/features/Features";
 import Hero from "@/components/sections/hero/Hero";
