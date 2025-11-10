@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isExplicitPause, setIsExplicitPause] = useState(false);
 
   const resumeTimeoutRef = useRef<number | null>(null);
 
@@ -14,6 +15,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
 
     resumeTimeoutRef.current = window.setTimeout(() => {
       setIsPaused(false);
+      setIsExplicitPause(false);
       resumeTimeoutRef.current = null;
     }, 10000);
   };
@@ -42,7 +44,60 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 py-12">
+    <div
+      className="w-full max-w-4xl mx-auto px-6 py-12 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (loading) return;
+
+        switch (e.key) {
+          case 'ArrowLeft':
+            e.preventDefault();
+            setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+            setIsPaused(true);
+            if (!isExplicitPause) {
+              scheduleResume();
+            }
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+            setIsPaused(true);
+            if (!isExplicitPause) {
+              scheduleResume();
+            }
+            break;
+          case ' ': {
+            e.preventDefault(); // Prevent scrolling
+            setIsPaused((prev) => {
+              if (!prev) {
+                setIsExplicitPause(true); // User explicitly paused
+              } else {
+                setIsExplicitPause(false); // User explicitly resumed
+              }
+              return !prev;
+            }); // Toggle state
+            // Clear any pending auto-resume timeout when toggling
+            if (resumeTimeoutRef.current) {
+              clearTimeout(resumeTimeoutRef.current);
+              resumeTimeoutRef.current = null;
+            }
+            break;
+          }
+          case 'Escape':
+            setIsPaused(true);
+            if (resumeTimeoutRef.current) {
+              clearTimeout(resumeTimeoutRef.current);
+              resumeTimeoutRef.current = null;
+            }
+            break;
+          default:
+            break;
+        }
+      }}
+      aria-label="Writing Demo"
+      role="region"
+    >
       <h2 className="text-3xl font-medium text-purple-400 text-center mb-8">
         Human-Quality Writing Demo
       </h2>
@@ -76,7 +131,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             </div>
 
             {/* Writing Demo */}
-            <div className="flex items-center gap-3 text-lg">
+            <div className="flex items-center gap-3 text-lg" aria-live="polite" aria-atomic="true">
               <div className="text-2xl">{slides[currentSlide].robotEmoji}</div>
               <div className="text-gray-400">→</div>
               <div className="text-2xl">{slides[currentSlide].documentEmoji}</div>
@@ -94,6 +149,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
                   onClick={() => {
                     setCurrentSlide(index);
                     setIsPaused(true);
+                    setIsExplicitPause(false);
                     scheduleResume();
                   }}
                   className={`w-2 h-2 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
