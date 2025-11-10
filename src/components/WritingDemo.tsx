@@ -42,7 +42,49 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-6 py-12">
+    <div
+      className="w-full max-w-4xl mx-auto px-6 py-12 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (loading) return;
+
+        switch (e.key) {
+          case 'ArrowLeft':
+            setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+            setIsPaused(true);
+            scheduleResume();
+            break;
+          case 'ArrowRight':
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+            setIsPaused(true);
+            scheduleResume();
+            break;
+          case ' ':
+            e.preventDefault(); // Prevent scrolling
+            setIsPaused((prev) => !prev);
+            if (!isPaused) {
+              scheduleResume();
+            } else {
+              if (resumeTimeoutRef.current) {
+                clearTimeout(resumeTimeoutRef.current);
+                resumeTimeoutRef.current = null;
+              }
+            }
+            break;
+          case 'Escape':
+            setIsPaused(true);
+            if (resumeTimeoutRef.current) {
+              clearTimeout(resumeTimeoutRef.current);
+              resumeTimeoutRef.current = null;
+            }
+            break;
+          default:
+            break;
+        }
+      }}
+      aria-label="Writing Demo"
+      role="region"
+    >
       <h2 className="text-3xl font-medium text-purple-400 text-center mb-8">
         Human-Quality Writing Demo
       </h2>
