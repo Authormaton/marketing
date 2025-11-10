@@ -61,10 +61,11 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             break;
           case ' ':
             e.preventDefault(); // Prevent scrolling
-            setIsPaused((prev) => !prev);
-            if (!isPaused) {
+            const wasPaused = isPaused; // Capture current state
+            setIsPaused((prev) => !prev); // Toggle state
+            if (wasPaused) { // If it was paused, we are now unpausing
               scheduleResume();
-            } else {
+            } else { // If it was not paused, we are now pausing
               if (resumeTimeoutRef.current) {
                 clearTimeout(resumeTimeoutRef.current);
                 resumeTimeoutRef.current = null;
