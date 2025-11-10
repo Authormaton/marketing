@@ -1,4 +1,5 @@
 import React from 'react';
+import OptimizedImage from '@/components/common/OptimizedImage';
 
 interface FeatureCardProps {
   imageSrc?: string;
@@ -17,11 +18,12 @@ const FeatureCard: React.FC<FeatureCardProps> = React.memo(({ imageSrc, icon, ti
       <div className="flex gap-5 items-center">
         <div className="w-14 h-14 bg-gradient-to-br from-purple-900/60 to-black/60 border border-purple-700/40 rounded-xl flex items-center justify-center text-3xl shadow-md group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
           {imageSrc ? (
-            <img
+            <OptimizedImage
               src={imageSrc}
               alt={imageAlt || title}
-              loading="lazy"
               className="w-8 h-8 object-contain"
+              width={32} // Corresponds to w-8 (8 * 4 = 32px)
+              height={32} // Corresponds to h-8 (8 * 4 = 32px)
             />
           ) : (
             <span className="feature-icon" aria-hidden="true">{icon}</span>

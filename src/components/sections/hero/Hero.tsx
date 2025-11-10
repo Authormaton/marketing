@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { fadeIn, slideUp, staggerContainer } from '@/lib/animations';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import OptimizedImage from '@/components/common/OptimizedImage';
 
 const WorkflowDiagram = dynamic(() => import('./WorkflowDiagram'), {
   ssr: false,
@@ -20,11 +21,12 @@ export default function Hero() {
       animate={isVisible ? "visible" : "hidden"}
       className="w-full flex flex-col sm:flex-row items-center justify-center pt-20 pb-5 px-4 relative overflow-hidden"
     >
-      <img
+      <OptimizedImage
         src="/bg.png"
         alt="Background"
         className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
         aria-hidden="true"
+        fill
       />
       <motion.h1
         variants={fadeIn}
