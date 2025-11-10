@@ -50,11 +50,13 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
 
         switch (e.key) {
           case 'ArrowLeft':
+            e.preventDefault();
             setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
             setIsPaused(true);
             scheduleResume();
             break;
           case 'ArrowRight':
+            e.preventDefault();
             setCurrentSlide((prev) => (prev + 1) % slides.length);
             setIsPaused(true);
             scheduleResume();
@@ -63,13 +65,10 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             e.preventDefault(); // Prevent scrolling
             const wasPaused = isPaused; // Capture current state
             setIsPaused((prev) => !prev); // Toggle state
-            if (wasPaused) { // If it was paused, we are now unpausing
-              if (resumeTimeoutRef.current) {
-                clearTimeout(resumeTimeoutRef.current);
-                resumeTimeoutRef.current = null;
-              }
-            } else { // If it was not paused, we are now pausing
-              scheduleResume();
+            // Clear any pending auto-resume timeout when toggling
+            if (resumeTimeoutRef.current) {
+              clearTimeout(resumeTimeoutRef.current);
+              resumeTimeoutRef.current = null;
             }
             break;
           }
