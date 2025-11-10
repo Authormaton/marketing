@@ -1,12 +1,11 @@
 // src/app/demo/page.tsx
 'use client'
-import React from 'react'
+import React, { FC } from 'react'
 import Navigation from '@/components/common/Navigation'
+interface DemoPageProps {}
 
-export default function DemoPage() {
+const DemoPage: FC<DemoPageProps> = () => {
   return (
-    <>
-      <Navigation />
       <main id="main-content">
         <h1>Demo</h1>
         <p>This is the demo page. Replace with your actual demo content.</p>

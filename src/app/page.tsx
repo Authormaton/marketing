@@ -1,21 +1,4 @@
-import ContentCrisis from "../components/sections/content-crisis/ContentCrisis";
-import Features from "../components/sections/features/Features";
-import Hero from "@/components/sections/hero/Hero";
-import Navigation from "@/components/common/Navigation";
-import WritingDemo from "../components/WritingDemo";
-import KnowledgeTransform from "../components/KnowledgeTransform";
-import Footer from "@/components/common/Footer";
+interface HomePageProps {}
 
-export default function Home() {
+const HomePage: FC<HomePageProps> = () => {
   return (
-    <div className="bg-black">
-      <Navigation />
-      <Hero />
-      <ContentCrisis />
-      <Features />
-      <KnowledgeTransform />
-      <WritingDemo />
-      <Footer />
-    </div>
-  );
-}
