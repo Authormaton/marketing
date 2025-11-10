@@ -59,19 +59,20 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             setIsPaused(true);
             scheduleResume();
             break;
-          case ' ':
+          case ' ': {
             e.preventDefault(); // Prevent scrolling
             const wasPaused = isPaused; // Capture current state
             setIsPaused((prev) => !prev); // Toggle state
             if (wasPaused) { // If it was paused, we are now unpausing
-              scheduleResume();
-            } else { // If it was not paused, we are now pausing
               if (resumeTimeoutRef.current) {
                 clearTimeout(resumeTimeoutRef.current);
                 resumeTimeoutRef.current = null;
               }
+            } else { // If it was not paused, we are now pausing
+              scheduleResume();
             }
             break;
+          }
           case 'Escape':
             setIsPaused(true);
             if (resumeTimeoutRef.current) {
