@@ -1,6 +1,6 @@
 // src/app/demo/page.tsx
 'use client'
-import React from 'react'
+import React, { FC } from 'react'
 import Navigation from '@/components/common/Navigation'
 interface DemoPageProps {}
 
