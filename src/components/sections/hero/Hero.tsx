@@ -45,13 +45,14 @@ export default function Hero() {
         Harness agentic AI to automate expert-level writing and research with
         unprecedented accuracy in the decentralized web space.
       </motion.p>
-      <motion.button
+      <motion.a
         variants={slideUp}
-        className="relative z-10 mt-8 px-8 py-3 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+        href="#features"
+        className="relative z-10 mt-8 px-8 py-3 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 flex items-center justify-center"
         onClick={() => buttonClick('Hero CTA Button')}
       >
         Learn More
-      </motion.button>
+      </motion.a>
       <WorkflowDiagram/>
     </motion.div>
   );
