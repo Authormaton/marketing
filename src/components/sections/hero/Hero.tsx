@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { fadeIn, slideUp, staggerContainer } from '@/lib/animations';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import OptimizedImage from '@/components/common/OptimizedImage';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 const WorkflowDiagram = dynamic(() => import('./WorkflowDiagram'), {
   ssr: false,
@@ -12,6 +13,7 @@ const WorkflowDiagram = dynamic(() => import('./WorkflowDiagram'), {
 
 export default function Hero() {
   const { ref, isVisible } = useIntersectionObserver({ threshold: 0.1 });
+  const { buttonClick } = useAnalytics();
 
   return (
     <motion.div
@@ -43,6 +45,13 @@ export default function Hero() {
         Harness agentic AI to automate expert-level writing and research with
         unprecedented accuracy in the decentralized web space.
       </motion.p>
+      <motion.button
+        variants={slideUp}
+        className="relative z-10 mt-8 px-8 py-3 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+        onClick={() => buttonClick('Hero CTA Button')}
+      >
+        Learn More
+      </motion.button>
       <WorkflowDiagram/>
     </motion.div>
   );
