@@ -58,8 +58,15 @@ export const ContactForm = () => {
 
     // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log('Form submitted:', formData);
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (Math.random() > 0.8) { // 20% chance of failure
+            reject(new Error('Simulated network error'));
+          } else {
+            resolve(null);
+          }
+        }, 1500);
+      });
       setSuccessMessage('Your message has been sent successfully!');
       setFormData({
         name: '',
@@ -90,9 +97,11 @@ export const ContactForm = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'}`}
+              aria-invalid={errors.name ? "true" : "false"}
+              aria-describedby={errors.name ? "name-error" : undefined}
             />
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+            {errors.name && <p id="name-error" role="alert" className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
@@ -102,9 +111,11 @@ export const ContactForm = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'}`}
+              aria-invalid={errors.email ? "true" : "false"}
+              aria-describedby={errors.email ? "email-error" : undefined}
             />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+            {errors.email && <p id="email-error" role="alert" className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
           <div>
             <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
@@ -114,9 +125,11 @@ export const ContactForm = () => {
               rows={4}
               value={formData.message}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${errors.message ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'}`}
+              aria-invalid={errors.message ? "true" : "false"}
+              aria-describedby={errors.message ? "message-error" : undefined}
             ></textarea>
-            {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+            {errors.message && <p id="message-error" role="alert" className="text-red-500 text-xs mt-1">{errors.message}</p>}
           </div>
           {successMessage && <p className="text-green-600 text-sm">{successMessage}</p>}
           {errorMessage && <p className="text-red-600 text-sm">{errorMessage}</p>}
