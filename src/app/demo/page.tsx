@@ -1,15 +1,15 @@
 // src/app/demo/page.tsx
 'use client'
 import React, { FC } from 'react'
-import Navigation from '@/components/common/Navigation'
-interface DemoPageProps {}
+import { ContactForm } from '@/components/ContactForm'
 
-const DemoPage: FC<DemoPageProps> = () => {
+const DemoPage: FC = () => {
   return (
-      <main id="main-content">
-        <h1>Demo</h1>
-        <p>This is the demo page. Replace with your actual demo content.</p>
-      </main>
-    </>
+    <main id="main-content" className="flex min-h-screen flex-col items-center justify-between p-24">
+      <h1 className="text-4xl font-bold mb-8">Contact Us Demo</h1>
+      <ContactForm />
+    </main>
   )
 }
+
+export default DemoPage;
