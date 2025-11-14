@@ -85,12 +85,15 @@ export const ContactForm = () => {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>Contact Us</CardTitle>
+        <CardTitle id="contact-form-title">Contact Us</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" aria-labelledby="contact-form-title">
+          <fieldset className="space-y-4">
+            <legend className="sr-only">Contact Information</legend>
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+            <p id="name-hint" className="sr-only">Your full name</p>
             <input
               type="text"
               id="name"
@@ -99,12 +102,13 @@ export const ContactForm = () => {
               onChange={handleChange}
               className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'}`}
               aria-invalid={errors.name ? "true" : "false"}
-              aria-describedby={errors.name ? "name-error" : undefined}
+              aria-describedby={errors.name ? "name-error name-hint" : "name-hint"}
             />
             {errors.name && <p id="name-error" role="alert" className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <p id="email-hint" className="sr-only">Your email address</p>
             <input
               type="email"
               id="email"
@@ -113,7 +117,7 @@ export const ContactForm = () => {
               onChange={handleChange}
               className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'}`}
               aria-invalid={errors.email ? "true" : "false"}
-              aria-describedby={errors.email ? "email-error" : undefined}
+              aria-describedby={errors.email ? "email-error email-hint" : "email-hint"}
             />
             {errors.email && <p id="email-error" role="alert" className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
@@ -131,11 +135,15 @@ export const ContactForm = () => {
             ></textarea>
             {errors.message && <p id="message-error" role="alert" className="text-red-500 text-xs mt-1">{errors.message}</p>}
           </div>
-          {successMessage && <p className="text-green-600 text-sm">{successMessage}</p>}
-          {errorMessage && <p className="text-red-600 text-sm">{errorMessage}</p>}
+          {successMessage && <p id="success-message" role="status" aria-live="polite" className="text-green-600 text-sm">{successMessage}</p>}
+          {errorMessage && <p id="error-message" role="alert" aria-live="assertive" className="text-red-600 text-sm">{errorMessage}</p>}
+          <div aria-live="polite" aria-atomic="true" className="sr-only">
+            {loading ? 'Sending message...' : ''}
+          </div>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? 'Sending...' : 'Send Message'}
           </Button>
+        </fieldset>
         </form>
       </CardContent>
     </Card>
