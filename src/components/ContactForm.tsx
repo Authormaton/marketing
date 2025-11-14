@@ -43,8 +43,15 @@ export const ContactForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const newErrors: FormErrors = {};
+    newErrors.name = validate(formData.name, [required('Name is required'), minLength(2, 'Name must be at least 2 characters'), maxLength(50, 'Name must not exceed 50 characters')]);
+    newErrors.email = validate(formData.email, [required('Email is required'), email('Invalid email address'), maxLength(100, 'Email must not exceed 100 characters')]);
+    newErrors.message = validate(formData.message, [required('Message is required'), minLength(10, 'Message must be at least 10 characters'), maxLength(500, 'Message must not exceed 500 characters')]);
+
+    setErrors(newErrors); // Update the state with new errors
+
     if (Object.values(newErrors).some(Boolean)) {
-      setErrors(newErrors);
       setLoading(false);
       setErrorMessage('Please correct the errors in the form.');
       setSuccessMessage(null);
