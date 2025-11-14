@@ -11,21 +11,34 @@ const Features = () => {
     setIsLoading(true);
     setError(null);
     // Simulate an API call
-    setTimeout(() => {
-      try {
-        // Simulate a random error for demonstration
-        if (Math.random() < 0.2) { // 20% chance of error
-          throw new Error('Failed to load features. Please try again.');
+    if (process.env.NODE_ENV === 'development') {
+      setTimeout(() => {
+        try {
+          // Simulate a random error for demonstration
+          if (Math.random() < 0.2) { // 20% chance of error
+            throw new Error('Failed to load features. Please try again.');
+          }
+          setFeatureData(staticFeatures);
+          setError(null);
+        } catch (err: unknown) {
+          setError(err instanceof Error ? err.message : String(err));
+          setFeatureData(null);
+        } finally {
+          setIsLoading(false);
         }
+      }, 1500); // Simulate 1.5 seconds loading time
+    } else {
+      // In production, directly load features without artificial delay or random errors
+      try {
         setFeatureData(staticFeatures);
         setError(null);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : String(err));
         setFeatureData(null);
       } finally {
         setIsLoading(false);
       }
-    }, 1500); // Simulate 1.5 seconds loading time
+    }
   };
 
   useEffect(() => {
@@ -34,7 +47,7 @@ const Features = () => {
 
   const renderContent = () => {
     if (isLoading) {
-      return Array.from({ length: 4 }).map((_, index) => (
+      return Array.from({ length: staticFeatures.length }).map((_, index) => (
         <FeatureCard key={index} loading={true} title="" subtitle="" description="" />
       ));
     }
