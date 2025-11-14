@@ -8,10 +8,26 @@ interface FeatureCardProps {
   subtitle: string;
   description: string;
   imageAlt?: string;
+  loading?: boolean;
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = React.memo(({ imageSrc, icon, title, subtitle, description, imageAlt }) => {
+const FeatureCard: React.FC<FeatureCardProps> = React.memo(({ imageSrc, icon, title, subtitle, description, imageAlt, loading = false }) => {
   const titleId = `feature-card-title-${title.replace(/\s+/g, '-').toLowerCase()}`;
+
+  if (loading) {
+    return (
+      <div className="relative w-full bg-gradient-to-br from-black/30 via-black/10 to-purple-900/10 border border-purple-800/30 shadow-xl rounded-2xl p-7 overflow-hidden">
+        <div className="flex gap-5 items-center animate-pulse">
+          <div className="w-14 h-14 bg-gray-700 rounded-xl shimmer"></div>
+          <div className="flex-1 space-y-2">
+            <div className="h-6 bg-gray-700 rounded w-3/4 shimmer"></div>
+            <div className="h-4 bg-gray-700 rounded w-1/2 shimmer"></div>
+            <div className="h-4 bg-gray-700 rounded w-full shimmer"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div role="article" aria-labelledby={titleId} className="relative w-full bg-gradient-to-br from-black/30 via-black/10 to-purple-900/10 border border-purple-800/30 shadow-xl rounded-2xl p-7 overflow-hidden hover:shadow-2xl hover:border-purple-500/60 transition-all duration-300 group">
