@@ -40,15 +40,6 @@ export const ContactForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setSuccessMessage(null);
-    setErrorMessage(null);
-
-    const newErrors: FormErrors = {};
-    newErrors.name = validate(formData.name, [required, minLength(2)]);
-    newErrors.email = validate(formData.email, [required, email]);
-    newErrors.message = validate(formData.message, [required, minLength(10), maxLength(500)]);
-
     if (Object.values(newErrors).some(Boolean)) {
       setErrors(newErrors);
       setLoading(false);
@@ -56,6 +47,7 @@ export const ContactForm = () => {
       return;
     }
 
+    setLoading(true);
     // Simulate API call
     try {
       await new Promise((resolve, reject) => {
@@ -101,7 +93,7 @@ export const ContactForm = () => {
               value={formData.name}
               onChange={handleChange}
               className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'}`}
-              aria-invalid={errors.name ? "true" : "false"}
+              aria-invalid={errors.name ? "true" : undefined}
               aria-describedby={errors.name ? "name-error name-hint" : "name-hint"}
             />
             {errors.name && <p id="name-error" role="alert" className="text-red-500 text-xs mt-1">{errors.name}</p>}
@@ -116,13 +108,14 @@ export const ContactForm = () => {
               value={formData.email}
               onChange={handleChange}
               className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'}`}
-              aria-invalid={errors.email ? "true" : "false"}
+              aria-invalid={errors.email ? "true" : undefined}
               aria-describedby={errors.email ? "email-error email-hint" : "email-hint"}
             />
             {errors.email && <p id="email-error" role="alert" className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
           <div>
             <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
+            <p id="message-hint" className="sr-only">Your message</p>
             <textarea
               id="message"
               name="message"
@@ -130,8 +123,8 @@ export const ContactForm = () => {
               value={formData.message}
               onChange={handleChange}
               className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${errors.message ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'}`}
-              aria-invalid={errors.message ? "true" : "false"}
-              aria-describedby={errors.message ? "message-error" : undefined}
+              aria-invalid={errors.message ? "true" : undefined}
+              aria-describedby={errors.message ? "message-error message-hint" : "message-hint"}
             ></textarea>
             {errors.message && <p id="message-error" role="alert" className="text-red-500 text-xs mt-1">{errors.message}</p>}
           </div>
