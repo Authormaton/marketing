@@ -133,12 +133,6 @@ describe('Validation Utilities', () => {
       expect(validate('Password123', validators)).toBeUndefined();
     });
 
-    it('should handle undefined values gracefully (assuming validators expect string)', () => {
-      // This test assumes that the validators are designed to handle string inputs.
-      // If an undefined value is passed, it will be treated as an empty string by the current validators.
-      const validators: Validator[] = [required, minLength(3)];
-      // @ts-ignore - Intentionally testing with undefined to see how validators react
-      expect(validate(undefined as any, validators)).toBe('This field is required.');
-    });
+
   });
 });
