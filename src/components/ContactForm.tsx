@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { required, email, minLength, maxLength, validate } from '@/lib/validation';
@@ -29,6 +29,9 @@ export const ContactForm = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const successMessageRef = useRef<HTMLParagraphElement>(null);
+  const errorMessageRef = useRef<HTMLParagraphElement>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -44,6 +47,7 @@ export const ContactForm = () => {
       setErrors(newErrors);
       setLoading(false);
       setErrorMessage('Please correct the errors in the form.');
+      setSuccessMessage(null);
       return;
     }
 
@@ -60,6 +64,7 @@ export const ContactForm = () => {
         }, 1500);
       });
       setSuccessMessage('Your message has been sent successfully!');
+      setErrorMessage(null);
       setFormData({
         name: '',
         email: '',
@@ -69,6 +74,7 @@ export const ContactForm = () => {
     } catch (error) {
       console.error('Form submission error:', error);
       setErrorMessage('There was an error sending your message. Please try again.');
+      setSuccessMessage(null);
     } finally {
       setLoading(false);
     }
