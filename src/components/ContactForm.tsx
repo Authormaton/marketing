@@ -46,24 +46,24 @@ export const ContactForm = () => {
 
     const newErrors: FormErrors = {};
     const nameValidators = [
-      required('Name is required'),
+      required,
       minLength(2, 'Name must be at least 2 characters'),
       maxLength(50, 'Name must not exceed 50 characters'),
-    ] as Validator[];
+    ];
     newErrors.name = validate(formData.name, nameValidators);
 
     const emailValidators = [
-      required('Email is required'),
-      email('Invalid email address'),
+      required,
+      email,
       maxLength(100, 'Email must not exceed 100 characters'),
-    ] as Validator[];
+    ];
     newErrors.email = validate(formData.email, emailValidators);
 
     const messageValidators = [
-      required('Message is required'),
+      required,
       minLength(10, 'Message must be at least 10 characters'),
       maxLength(500, 'Message must not exceed 500 characters'),
-    ] as Validator[];
+    ];
     newErrors.message = validate(formData.message, messageValidators);
 
     setErrors(newErrors); // Update the state with new errors

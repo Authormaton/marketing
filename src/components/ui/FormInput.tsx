@@ -21,7 +21,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
     return (
       <div className="space-y-1">
         {label && <label htmlFor={id} className="block text-sm font-medium text-gray-700">{label}</label>}
-        {hint && <p id={`${id}-hint`} className="sr-only">{hint}</p>}
+        {hint && <p id={`${id}-hint`} className="text-sm text-gray-500">{hint}</p>}
         <input
           ref={ref}
           type={type}
