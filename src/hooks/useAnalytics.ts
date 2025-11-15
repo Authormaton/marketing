@@ -6,11 +6,11 @@ export const useAnalytics = () => {
     trackPageView(url);
   }, []);
 
-  const buttonClick = useCallback((buttonName: string, properties?: Record<string, any>) => {
+  const buttonClick = useCallback((buttonName: string, properties?: Record<string, unknown>) => {
     trackButtonClick(buttonName, properties);
   }, []);
 
-  const customEvent = useCallback((eventName: string, properties?: Record<string, any>) => {
+  const customEvent = useCallback((eventName: string, properties?: Record<string, unknown>) => {
     trackCustomEvent(eventName, properties);
   }, []);
 

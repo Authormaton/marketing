@@ -1,6 +1,10 @@
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
+    gtag: (
+      command: 'config' | 'event',
+      eventName: string,
+      params?: Record<string, unknown>
+    ) => void;
   }
 }
 
@@ -18,7 +22,7 @@ export const trackPageView = (url: string) => {
   }
 };
 
-export const trackButtonClick = (buttonName: string, properties?: Record<string, any>) => {
+export const trackButtonClick = (buttonName: string, properties?: Record<string, unknown>) => {
   if (isDevelopment) {
     console.log(`Analytics: Button click - ${buttonName}`, properties);
   }
@@ -31,7 +35,7 @@ export const trackButtonClick = (buttonName: string, properties?: Record<string,
   }
 };
 
-export const trackCustomEvent = (eventName: string, properties?: Record<string, any>) => {
+export const trackCustomEvent = (eventName: string, properties?: Record<string, unknown>) => {
   if (isDevelopment) {
     console.log(`Analytics: Custom event - ${eventName}`, properties);
   }
