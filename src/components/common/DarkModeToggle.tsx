@@ -50,8 +50,7 @@ const DarkModeToggle = () => {
     }
 
     setTheme(initialTheme);
-    applyTheme(initialTheme, systemPref);
-  }, [applyTheme, getSystemTheme]); // Empty dependency array to run only once on mount
+  }, [applyTheme, getSystemTheme]); // Effect runs once on mount to set the initial theme based on stored preference or system setting. Theme application is handled by the persistence effect after 'setTheme' updates the state.
 
   // Effect for listening to system theme changes
   useEffect(() => {
