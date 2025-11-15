@@ -50,19 +50,22 @@ const DarkModeToggle = () => {
     }
 
     setTheme(initialTheme);
+    applyTheme(initialTheme, systemPref);
   }, [applyTheme, getSystemTheme]); // Effect runs once on mount to set the initial theme based on stored preference or system setting. Theme application is handled by the persistence effect after 'setTheme' updates the state.
 
   // Effect for listening to system theme changes
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => {
-      if (themeRef.current === "system") {
-        applyTheme("system", getSystemTheme());
-      }
-    };
+    if (typeof window !== "undefined" && window.matchMedia) {
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      const handleChange = () => {
+        if (themeRef.current === "system") {
+          applyTheme("system", getSystemTheme());
+        }
+      };
 
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
   }, [applyTheme, getSystemTheme]); // No 'theme' in deps, uses ref
 
   // Effect for persisting theme changes to localStorage
