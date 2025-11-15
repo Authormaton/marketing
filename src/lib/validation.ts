@@ -15,16 +15,16 @@ export const email: Validator = (value: string) => {
   return undefined;
 };
 
-export const minLength = (min: number): Validator => (value: string) => {
+export const minLength = (min: number, message?: string): Validator => (value: string) => {
   if (value.length < min) {
-    return `This field must be at least ${min} characters long.`;
+    return message || `This field must be at least ${min} characters long.`;
   }
   return undefined;
 };
 
-export const maxLength = (max: number): Validator => (value: string) => {
+export const maxLength = (max: number, message?: string): Validator => (value: string) => {
   if (value.length > max) {
-    return `This field must be no more than ${max} characters long.`;
+    return message || `This field must be no more than ${max} characters long.`;
   }
   return undefined;
 };

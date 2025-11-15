@@ -1,6 +1,6 @@
-import { onCLS, onINP, onLCP, ReportHandler } from 'web-vitals';
+import { onCLS, onINP, onLCP, Metric } from 'web-vitals';
 
-const reportWebVitals = (onReport?: ReportHandler) => {
+const reportWebVitals = (onReport?: (metric: Metric) => void) => {
   onCLS(metric => {
     console.log('Core Web Vitals: CLS', metric);
     onReport?.(metric);
