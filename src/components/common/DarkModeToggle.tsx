@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Moon, Sun, Laptop } from "lucide-react";
 
 type ThemeMode = "light" | "dark" | "system";
@@ -33,28 +33,40 @@ const DarkModeToggle = () => {
     []
   );
 
+  const themeRef = useRef(theme);
+
   useEffect(() => {
-    // Initialize theme from localStorage or system preference
-    const storedTheme = localStorage.getItem("theme") as ThemeMode;
-    const initialTheme = storedTheme || "system";
-    setTheme(initialTheme);
+    themeRef.current = theme;
+  }, [theme]);
 
+  // Mount-only effect for initial theme setup
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("theme");
     const systemPref = getSystemTheme();
-    applyTheme(initialTheme, systemPref);
 
-    // Listen for changes in system theme preference
+    let initialTheme: ThemeMode = "system";
+    if (storedTheme === "light" || storedTheme === "dark" || storedTheme === "system") {
+      initialTheme = storedTheme;
+    }
+
+    setTheme(initialTheme);
+    applyTheme(initialTheme, systemPref);
+  }, [applyTheme, getSystemTheme]); // Empty dependency array to run only once on mount
+
+  // Effect for listening to system theme changes
+  useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = () => {
-      if (theme === "system") {
+      if (themeRef.current === "system") {
         applyTheme("system", getSystemTheme());
       }
     };
+
     mediaQuery.addEventListener("change", handleChange);
-
     return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [applyTheme, getSystemTheme, theme]);
+  }, [applyTheme, getSystemTheme]); // No 'theme' in deps, uses ref
 
-  // Effect to update theme when 'theme' state changes
+  // Effect for persisting theme changes to localStorage
   useEffect(() => {
     const systemPref = getSystemTheme();
     applyTheme(theme, systemPref);
