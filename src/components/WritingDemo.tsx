@@ -1,12 +1,17 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
+  const { customEvent } = useAnalytics();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isExplicitPause, setIsExplicitPause] = useState(false);
 
   const resumeTimeoutRef = useRef<number | null>(null);
+  const slideStartTimeRef = useRef<number>(Date.now());
+  const prevSlideRef = useRef<number | null>(null); // To track the previously active slide
+
 
   const scheduleResume = () => {
     if (resumeTimeoutRef.current) {
@@ -22,23 +27,51 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
 
   const slides: {robotEmoji: string; documentEmoji: string; text: string;}[] = [
     { robotEmoji: '🤖', documentEmoji: '📝', text: 'Technical whitepaper generated with blockchain-specific expertise' },
-    { robotEmoji: '🤖', documentEmoji: '📊', text: 'Market analysis report with data-driven insights' },
-    { robotEmoji: '🤖', documentEmoji: '📱', text: 'Product documentation with technical accuracy' },
-    { robotEmoji: '🤖', documentEmoji: '📈', text: 'Research paper with comprehensive citations' }
+    { robotEmoji: '📊', documentEmoji: '📝', text: 'Market analysis report with data-driven insights' },
+    { robotEmoji: '📱', documentEmoji: '📝', text: 'Product documentation with technical accuracy' },
+    { robotEmoji: '📈', documentEmoji: '📝', text: 'Research paper with comprehensive citations' }
   ];
 
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
+      setCurrentSlide((prev) => {
+        const newSlide = (prev + 1) % slides.length;
+        customEvent('slide_navigation', { direction: 'auto', from_slide: prev, to_slide: newSlide });
+        return newSlide;
+      });
     }, 3000);
     return () => clearInterval(timer);
-  }, [isPaused, slides.length]);
+  }, [isPaused, slides.length, customEvent]);
+
+  useEffect(() => {
+    if (currentSlide !== prevSlideRef.current) {
+      // Emit slide_time_spent only when the slide actually changes
+      if (prevSlideRef.current !== null) {
+        const timeSpent = Date.now() - slideStartTimeRef.current;
+        customEvent('slide_time_spent', { slide_index: prevSlideRef.current, time_ms: timeSpent });
+      }
+
+      // Update previous slide ref and reset start time for the new slide
+      prevSlideRef.current = currentSlide;
+      slideStartTimeRef.current = Date.now();
+    }
+  }, [currentSlide, customEvent]);
 
   useEffect(() => {
     return () => {
       if (resumeTimeoutRef.current) {
         clearTimeout(resumeTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Effect to emit final slide_time_spent on unmount
+  useEffect(() => {
+    return () => {
+      if (prevSlideRef.current !== null) {
+        const finalTimeSpent = Date.now() - slideStartTimeRef.current;
+        customEvent('slide_time_spent', { slide_index: prevSlideRef.current, time_ms: finalTimeSpent });
       }
     };
   }, []);
@@ -50,32 +83,43 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
       onKeyDown={(e) => {
         if (loading) return;
 
+        customEvent('keyboard_shortcut_used', { key: e.key, current_slide: currentSlide });
+
         switch (e.key) {
-          case 'ArrowLeft':
+          case 'ArrowLeft': {
             e.preventDefault();
-            setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+            const newSlide = (currentSlide - 1 + slides.length) % slides.length;
+            setCurrentSlide(newSlide);
             setIsPaused(true);
             if (!isExplicitPause) {
               scheduleResume();
             }
+            customEvent('slide_navigation', { direction: 'left', from_slide: currentSlide, to_slide: newSlide });
             break;
-          case 'ArrowRight':
+          }
+          case 'ArrowRight': {
             e.preventDefault();
-            setCurrentSlide((prev) => (prev + 1) % slides.length);
+            const newSlide = (currentSlide + 1) % slides.length;
+            setCurrentSlide(newSlide);
             setIsPaused(true);
             if (!isExplicitPause) {
               scheduleResume();
             }
+            customEvent('slide_navigation', { direction: 'right', from_slide: currentSlide, to_slide: newSlide });
             break;
+          }
           case ' ': {
             e.preventDefault(); // Prevent scrolling
             setIsPaused((prev) => {
+              const newPausedState = !prev;
               if (!prev) {
                 setIsExplicitPause(true); // User explicitly paused
+                customEvent('demo_pause_toggle', { action: 'pause', current_slide: currentSlide });
               } else {
                 setIsExplicitPause(false); // User explicitly resumed
+                customEvent('demo_pause_toggle', { action: 'resume', current_slide: currentSlide });
               }
-              return !prev;
+              return newPausedState;
             }); // Toggle state
             // Clear any pending auto-resume timeout when toggling
             if (resumeTimeoutRef.current) {
@@ -90,6 +134,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
               clearTimeout(resumeTimeoutRef.current);
               resumeTimeoutRef.current = null;
             }
+            customEvent('demo_pause', { reason: 'escape_key', current_slide: currentSlide });
             break;
           default:
             break;
@@ -151,6 +196,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
                     setIsPaused(true);
                     setIsExplicitPause(false);
                     scheduleResume();
+                    customEvent('slide_navigation', { direction: 'direct', from_slide: currentSlide, to_slide: index });
                   }}
                   className={`w-2 h-2 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
                 />
