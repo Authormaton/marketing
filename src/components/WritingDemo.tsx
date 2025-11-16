@@ -10,7 +10,8 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
 
   const resumeTimeoutRef = useRef<number | null>(null);
   const slideStartTimeRef = useRef<number>(Date.now());
-  const prevSlideRef = useRef<number>(0); // To track the previously active slide
+  const prevSlideRef = useRef<number | null>(null); // To track the previously active slide
+
 
   const scheduleResume = () => {
     if (resumeTimeoutRef.current) {
@@ -44,27 +45,33 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   }, [isPaused, slides.length, customEvent]);
 
   useEffect(() => {
-    // Track time spent on the previous slide
-    const timeSpent = Date.now() - slideStartTimeRef.current;
-    if (prevSlideRef.current !== null) {
-      customEvent('slide_time_spent', { slide_index: prevSlideRef.current, time_ms: timeSpent });
+    if (currentSlide !== prevSlideRef.current) {
+      // Emit slide_time_spent only when the slide actually changes
+      if (prevSlideRef.current !== null) {
+        const timeSpent = Date.now() - slideStartTimeRef.current;
+        customEvent('slide_time_spent', { slide_index: prevSlideRef.current, time_ms: timeSpent });
+      }
+
+      // Update previous slide ref and reset start time for the new slide
+      prevSlideRef.current = currentSlide;
+      slideStartTimeRef.current = Date.now();
     }
-
-    // Update previous slide ref and reset start time for the new slide
-    prevSlideRef.current = currentSlide;
-    slideStartTimeRef.current = Date.now();
-
-    // Cleanup function for when the component unmounts
-    return () => {
-      const finalTimeSpent = Date.now() - slideStartTimeRef.current;
-      customEvent('slide_time_spent', { slide_index: prevSlideRef.current, time_ms: finalTimeSpent });
-    };
   }, [currentSlide, customEvent]);
 
   useEffect(() => {
     return () => {
       if (resumeTimeoutRef.current) {
         clearTimeout(resumeTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Effect to emit final slide_time_spent on unmount
+  useEffect(() => {
+    return () => {
+      if (prevSlideRef.current !== null) {
+        const finalTimeSpent = Date.now() - slideStartTimeRef.current;
+        customEvent('slide_time_spent', { slide_index: prevSlideRef.current, time_ms: finalTimeSpent });
       }
     };
   }, []);
