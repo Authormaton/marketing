@@ -1,5 +1,9 @@
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+
+const log = {
+  error: console.error,
+};
 
 interface OptimizedImageProps {
   src: string;
@@ -42,6 +46,7 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
   fallbackSrc = "/file.svg", // Default fallback image
 }) => {
   const [hasError, setHasError] = useState(false);
+  const [fallbackHasError, setFallbackHasError] = useState(false);
   const startTimeRef = React.useRef<number | null>(null);
 
   useEffect(() => {
@@ -54,20 +59,28 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
       console.log(`Image loaded: ${src}, Load time: ${loadTime.toFixed(2)}ms`);
     }
     setHasError(false); // Reset error state on successful load
+    setFallbackHasError(false); // Reset fallback error state on successful load
     onLoadingComplete?.(img);
   };
 
-  const handleError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    console.error(`Failed to load image: ${src}`, event);
+  const handleError = useCallback((event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    log.error(`Failed to load image: ${src}`, { event });
     setHasError(true);
     onImageError?.(event);
-  };
+  }, [src, onImageError]);
+
+  const handleFallbackError = useCallback(() => {
+    setFallbackHasError(true);
+  }, []);
 
   if (!fill && (width === undefined || height === undefined)) {
     throw new Error("OptimizedImage: 'width' and 'height' are required when 'fill' is false.");
   }
 
   if (hasError) {
+    if (fallbackHasError) {
+      return <img src="/file.svg" alt={`Failed to load ${alt}`} className={className} />;
+    }
     return (
       <Image
         src={fallbackSrc}
@@ -78,6 +91,7 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
         fill={fill}
         sizes={sizes}
         priority={priority}
+        onError={handleFallbackError}
       />
     );
   }
@@ -92,9 +106,7 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
       fill={fill}
       sizes={sizes}
       priority={priority}
-      loading={priority ? "eager" : "lazy"} // Eager load if priority is true
-      placeholder={blurDataURL ? "blur" : "empty"}
-      blurDataURL={blurDataURL || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="} // A tiny transparent PNG
+      placeholder={blurDataURL ? "blur" : "empty"} {...(blurDataURL && { blurDataURL })}
       onLoadingComplete={handleLoadingComplete}
       onError={handleError}
     />
