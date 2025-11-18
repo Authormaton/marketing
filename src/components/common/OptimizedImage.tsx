@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 const log = {
   error: console.error,
+  info: console.log,
 };
 
 interface OptimizedImageProps {
@@ -53,15 +54,15 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
     startTimeRef.current = performance.now();
   }, [src]);
 
-  const handleLoadingComplete = (img: HTMLImageElement) => {
+  const handleLoadingComplete = useCallback((img: HTMLImageElement) => {
     if (startTimeRef.current) {
       const loadTime = performance.now() - startTimeRef.current;
-      console.log(`Image loaded: ${src}, Load time: ${loadTime.toFixed(2)}ms`);
+      log.info(`Image loaded: ${src}, Load time: ${loadTime.toFixed(2)}ms`);
     }
     setHasError(false); // Reset error state on successful load
     setFallbackHasError(false); // Reset fallback error state on successful load
     onLoadingComplete?.(img);
-  };
+  }, [src, onLoadingComplete]);
 
   const handleError = useCallback((event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     log.error(`Failed to load image: ${src}`, { event });
