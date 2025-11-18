@@ -51,6 +51,8 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
   const startTimeRef = React.useRef<number | null>(null);
 
   useEffect(() => {
+    setHasError(false);
+    setFallbackHasError(false);
     startTimeRef.current = performance.now();
   }, [src]);
 
