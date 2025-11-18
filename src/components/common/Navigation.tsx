@@ -11,6 +11,7 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
   const { buttonClick } = useAnalytics();
   const menuRef = useRef<HTMLDivElement>(null);
   const toggleButtonRef = useRef<HTMLButtonElement>(null);
+  const hasOpenedMenuRef = useRef(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -67,13 +68,15 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
 
     if (isOpen) {
       // Focus the first focusable element in the menu when it opens
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         const firstFocusable = menuRef.current?.querySelector(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         ) as HTMLElement;
         firstFocusable?.focus();
       }, 0);
-    } else {
+      hasOpenedMenuRef.current = true;
+      return () => clearTimeout(timeoutId);
+    } else if (hasOpenedMenuRef.current) {
       // Return focus to the toggle button when the menu closes
       toggleButtonRef.current?.focus();
     }
