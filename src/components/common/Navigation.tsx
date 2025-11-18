@@ -66,16 +66,17 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
     document.addEventListener('keydown', handleEscape);
     document.addEventListener('keydown', handleFocusTrap);
 
+    let timeoutId: NodeJS.Timeout | undefined;
+
     if (isOpen) {
       // Focus the first focusable element in the menu when it opens
-      const timeoutId = setTimeout(() => {
+      timeoutId = setTimeout(() => {
         const firstFocusable = menuRef.current?.querySelector(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         ) as HTMLElement;
         firstFocusable?.focus();
       }, 0);
       hasOpenedMenuRef.current = true;
-      return () => clearTimeout(timeoutId);
     } else if (hasOpenedMenuRef.current) {
       // Return focus to the toggle button when the menu closes
       toggleButtonRef.current?.focus();
@@ -84,6 +85,7 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('keydown', handleFocusTrap);
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, [isOpen]);
 
