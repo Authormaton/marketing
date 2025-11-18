@@ -57,7 +57,7 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
   }, [src]);
 
   const handleLoadingComplete = useCallback((img: HTMLImageElement) => {
-    if (startTimeRef.current) {
+    if (startTimeRef.current !== null) {
       const loadTime = performance.now() - startTimeRef.current;
       log.info(`Image loaded: ${src}, Load time: ${loadTime.toFixed(2)}ms`);
     }
@@ -82,7 +82,7 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
 
   if (hasError) {
     if (fallbackHasError) {
-      return <img src="/file.svg" alt={`Failed to load ${alt}`} className={className} />;
+      return <img src="/file.svg" alt={`Failed to load ${alt}`} className={className} width={fill ? undefined : width} height={fill ? undefined : height} />;
     }
     return (
       <Image
