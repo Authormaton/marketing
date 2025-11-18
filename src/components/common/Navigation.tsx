@@ -43,8 +43,9 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
       const focusableElements = menuRef.current.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
+      if (focusableElements.length === 0) return;
       const firstElement = focusableElements[0] as HTMLElement;
-      const lastElement = focusableElements[focusableableElements.length - 1] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
       if (event.key === 'Tab') {
         if (event.shiftKey) { // Shift + Tab
