@@ -62,6 +62,7 @@ function loadQueue() {
 
 // 2. Offline Error Queuing (simplified for demonstration)
 const errorQueue: { error: Error; metadata?: ErrorMetadata }[] = [];
+loadQueue(); // Hydrate error queue from local storage on module load
 let isOnline = navigator.onLine;
 
 window.addEventListener('online', () => {
