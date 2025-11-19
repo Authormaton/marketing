@@ -37,7 +37,7 @@ export function CrisisCardsGrid() {
       className="flex flex-wrap justify-center gap-6"
       variants={staggerContainer}
       initial="hidden"
-      animate={isVisible && !prefersReducedMotion ? "visible" : "hidden"}
+      animate={prefersReducedMotion ? "visible" : (isVisible ? "visible" : "hidden")}
       exit="hidden"
     >
       <CrisisCard
