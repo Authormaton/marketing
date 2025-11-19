@@ -24,6 +24,42 @@ interface Breadcrumb {
   data?: Record<string, any>;
 }
 
+// Module-level state for context
+let breadcrumbs: Breadcrumb[] = [];
+let currentUser: ErrorMetadata['user'] = undefined;
+let contextMap: Record<string, any> = {};
+
+const LOCAL_STORAGE_KEY = 'errorQueue';
+const MAX_QUEUE_SIZE = 50; // Limit queue size to prevent unbounded storage growth
+
+// Helper to safely save the queue to localStorage
+function saveQueue() {
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(errorQueue));
+  } catch (e) {
+    console.error('Failed to save error queue to localStorage:', e);
+    // Fallback to in-memory if storage fails
+  }
+}
+
+// Helper to safely load the queue from localStorage
+function loadQueue() {
+  try {
+    const storedQueue = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (storedQueue) {
+      const parsedQueue = JSON.parse(storedQueue);
+      if (Array.isArray(parsedQueue)) {
+        errorQueue.push(...parsedQueue.slice(0, MAX_QUEUE_SIZE)); // Hydrate and respect max size
+      } else {
+        console.warn('Stored error queue is not an array, initializing empty queue.');
+      }
+    }
+  } catch (e) {
+    console.error('Failed to load or parse error queue from localStorage:', e);
+    // Fallback to empty queue if loading/parsing fails
+  }
+}
+
 // 2. Offline Error Queuing (simplified for demonstration)
 const errorQueue: { error: Error; metadata?: ErrorMetadata }[] = [];
 let isOnline = navigator.onLine;
@@ -123,11 +159,20 @@ export const errorLogger = {
    * @param metadata Optional metadata to attach to the error.
    */
   captureError(error: Error, metadata?: ErrorMetadata) {
+    const errorPayload: ErrorMetadata = {
+      ...metadata,
+      breadcrumbs: [...breadcrumbs, ...(metadata?.breadcrumbs || [])],
+      user: metadata?.user || currentUser,
+      context: { ...contextMap, ...(metadata?.context || {}) },
+    };
+
     if (!isOnline) {
-      errorQueue.push({ error, metadata });
+      errorQueue.push({ error, metadata: errorPayload });
+      saveQueue(); // Save queue after modification
       return;
     }
-    sendErrorToService(error, metadata);
+    sendErrorToService(error, errorPayload);
+    breadcrumbs = []; // Clear breadcrumbs after capturing an error
   },
 
   /**
@@ -135,8 +180,11 @@ export const errorLogger = {
    * @param breadcrumb The breadcrumb object.
    */
   addBreadcrumb(breadcrumb: Breadcrumb) {
-    // In a real Sentry-like integration, this would add to the current scope.
-    // For this mock, we'll just log it or store it temporarily if needed.
+    breadcrumbs.push(breadcrumb);
+    // Enforce a max number of breadcrumbs to prevent unbounded growth
+    if (breadcrumbs.length > 100) {
+      breadcrumbs = breadcrumbs.slice(-100);
+    }
     console.log('Breadcrumb:', breadcrumb);
   },
 
@@ -145,7 +193,7 @@ export const errorLogger = {
    * @param user User object with id, email, username, etc.
    */
   setUserContext(user: ErrorMetadata['user']) {
-    // In a real Sentry-like integration, this would set the user on the scope.
+    currentUser = user;
     console.log('User Context Set:', user);
   },
 
@@ -155,7 +203,7 @@ export const errorLogger = {
    * @param value The value for the context.
    */
   setContext(key: string, value: Record<string, any>) {
-    // In a real Sentry-like integration, this would set context on the scope.
+    contextMap = { ...contextMap, [key]: value };
     console.log('Context Set:', key, value);
   },
 };

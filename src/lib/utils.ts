@@ -12,3 +12,7 @@ export function classNames(...args: ClassValue[]) {
 export function formatYear() {
   return new Date().getFullYear()
 }
+
+export function isProduction(): boolean {
+  return process.env.NODE_ENV === 'production';
+}
