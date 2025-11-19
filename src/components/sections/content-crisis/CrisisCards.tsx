@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { FragmentedKnowledgeIcon, ExpertBottlenecksIcon, QualityInconsistencyIcon, TimeIntensiveProcessIcon } from "./CrisisIcons";
-import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
-import { slideUp, staggerContainer } from "../../lib/animations";
+import { useIntersectionObserver } from "../../../hooks/useIntersectionObserver";
+import { slideUp, staggerContainer } from "../../../lib/animations";
 
 interface CrisisCardProps {
   icon: ReactNode;
