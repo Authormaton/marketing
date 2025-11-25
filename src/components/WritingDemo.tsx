@@ -75,11 +75,20 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
         customEvent('slide_time_spent', { slide_index: prevSlideRef.current, time_ms: finalTimeSpent });
       }
     };
+  }, []); // Added missing closing for the first useEffect
+
+  // Effect for onboarding/help-overlay logic
   useEffect(() => {
-    const hasVisitedBefore = localStorage.getItem('hasVisitedWritingDemo');
-    if (!hasVisitedBefore) {
-      setShowHelp(true);
-      localStorage.setItem('hasVisitedWritingDemo', 'true');
+    try {
+      const hasVisitedBefore = localStorage.getItem('hasVisitedWritingDemo');
+      if (!hasVisitedBefore) {
+        setShowHelp(true);
+        localStorage.setItem('hasVisitedWritingDemo', 'true');
+      }
+    } catch (error) {
+      console.error('Failed to access localStorage:', error);
+      // Optionally, handle the error more gracefully, e.g., by not showing help
+      // or showing a fallback message. For now, just log.
     }
   }, []);
 
