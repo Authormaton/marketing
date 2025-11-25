@@ -85,7 +85,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
 
   return (
     <div
-      className="w-full max-w-4xl mx-auto px-6 py-12 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+      className="relative w-full max-w-4xl mx-auto px-6 py-12 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
       tabIndex={0}
       onKeyDown={(e) => {
         if (loading) return;
