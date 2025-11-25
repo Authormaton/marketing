@@ -7,6 +7,12 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isExplicitPause, setIsExplicitPause] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+
+  const setHelpVisible = (visible: boolean, source: 'keyboard' | 'close_button' | 'onboarding') => {
+    setShowHelp(visible);
+    customEvent('help_toggle', { action: visible ? 'show' : 'hide', source, current_slide: currentSlide });
+  };
 
   const resumeTimeoutRef = useRef<number | null>(null);
   const slideStartTimeRef = useRef<number>(Date.now());
@@ -74,11 +80,27 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
         customEvent('slide_time_spent', { slide_index: prevSlideRef.current, time_ms: finalTimeSpent });
       }
     };
+  }, [customEvent]); // Added missing closing for the first useEffect
+
+  // Effect for onboarding/help-overlay logic
+  useEffect(() => {
+    try {
+      const hasVisitedBefore = window.localStorage.getItem('hasVisitedWritingDemo');
+      if (!hasVisitedBefore) {
+        setShowHelp(true);
+        customEvent('help_toggle', { action: 'show', source: 'onboarding' });
+        window.localStorage.setItem('hasVisitedWritingDemo', 'true');
+      }
+    } catch (error) {
+      console.error('Failed to access localStorage:', error);
+      // Optionally, handle the error more gracefully, e.g., by not showing help
+      // or showing a fallback message. For now, just log.
+    }
   }, []);
 
   return (
     <div
-      className="w-full max-w-4xl mx-auto px-6 py-12 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+      className="relative w-full max-w-4xl mx-auto px-6 py-12 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
       tabIndex={0}
       onKeyDown={(e) => {
         if (loading) return;
@@ -136,6 +158,10 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             }
             customEvent('demo_pause', { reason: 'escape_key', current_slide: currentSlide });
             break;
+          case '?':
+            e.preventDefault();
+            setHelpVisible(!showHelp, 'keyboard');
+            break;
           default:
             break;
         }
@@ -143,6 +169,28 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
       aria-label="Writing Demo"
       role="region"
     >
+      {showHelp && (
+        <div
+          className="absolute top-4 right-4 bg-gray-800 text-white text-sm p-3 rounded-lg shadow-lg z-10 max-w-xs"
+          role="tooltip"
+          aria-hidden={!showHelp}
+        >
+          <p className="font-bold mb-1">Keyboard Navigation:</p>
+          <ul className="list-disc pl-4">
+            <li><span className="font-mono">←</span> <span className="font-mono">→</span>: Navigate slides</li>
+            <li><span className="font-mono">Spacebar</span>: Pause/Play</li>
+            <li><span className="font-mono">Esc</span>: Pause</li>
+            <li><span className="font-mono">?</span>: Toggle help</li>
+          </ul>
+          <button
+            onClick={() => setHelpVisible(false, 'close_button')}
+            className="absolute top-1 right-2 text-gray-400 hover:text-white focus:outline-none"
+            aria-label="Close help"
+          >
+            &times;
+          </button>
+        </div>
+      )}
       <h2 className="text-3xl font-medium text-purple-400 text-center mb-8">
         Human-Quality Writing Demo
       </h2>
