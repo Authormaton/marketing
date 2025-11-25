@@ -77,6 +77,7 @@ const Footer: React.FC<FooterProps> = ({ loading = false }) => {
               <span className="sr-only">Loading social links</span>
               <div className="w-6 h-6 bg-gray-700 rounded-full shimmer"></div>
               <div className="w-6 h-6 bg-gray-700 rounded-full shimmer"></div>
+              <div className="w-6 h-6 bg-gray-700 rounded-full shimmer"></div>
             </div>
           ) : (
             <div className="flex gap-4 mt-2">
