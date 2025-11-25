@@ -7,6 +7,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isExplicitPause, setIsExplicitPause] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   const resumeTimeoutRef = useRef<number | null>(null);
   const slideStartTimeRef = useRef<number>(Date.now());
@@ -74,6 +75,12 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
         customEvent('slide_time_spent', { slide_index: prevSlideRef.current, time_ms: finalTimeSpent });
       }
     };
+  useEffect(() => {
+    const hasVisitedBefore = localStorage.getItem('hasVisitedWritingDemo');
+    if (!hasVisitedBefore) {
+      setShowHelp(true);
+      localStorage.setItem('hasVisitedWritingDemo', 'true');
+    }
   }, []);
 
   return (
@@ -136,6 +143,11 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             }
             customEvent('demo_pause', { reason: 'escape_key', current_slide: currentSlide });
             break;
+          case '?':
+            e.preventDefault();
+            setShowHelp((prev) => !prev);
+            customEvent('help_toggle', { action: showHelp ? 'hide' : 'show', current_slide: currentSlide });
+            break;
           default:
             break;
         }
@@ -143,6 +155,28 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
       aria-label="Writing Demo"
       role="region"
     >
+      {showHelp && (
+        <div
+          className="absolute top-4 right-4 bg-gray-800 text-white text-sm p-3 rounded-lg shadow-lg z-10 max-w-xs"
+          role="tooltip"
+          aria-hidden={!showHelp}
+        >
+          <p className="font-bold mb-1">Keyboard Navigation:</p>
+          <ul className="list-disc pl-4">
+            <li><span className="font-mono">←</span> <span className="font-mono">→</span>: Navigate slides</li>
+            <li><span className="font-mono">Spacebar</span>: Pause/Play</li>
+            <li><span className="font-mono">Esc</span>: Pause</li>
+            <li><span className="font-mono">?</span>: Toggle help</li>
+          </ul>
+          <button
+            onClick={() => setShowHelp(false)}
+            className="absolute top-1 right-2 text-gray-400 hover:text-white focus:outline-none"
+            aria-label="Close help"
+          >
+            &times;
+          </button>
+        </div>
+      )}
       <h2 className="text-3xl font-medium text-purple-400 text-center mb-8">
         Human-Quality Writing Demo
       </h2>
