@@ -9,6 +9,11 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [isExplicitPause, setIsExplicitPause] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
 
+  const setHelpVisible = (visible: boolean, source: 'keyboard' | 'close_button' | 'onboarding') => {
+    setShowHelp(visible);
+    customEvent('help_toggle', { action: visible ? 'show' : 'hide', source, current_slide: currentSlide });
+  };
+
   const resumeTimeoutRef = useRef<number | null>(null);
   const slideStartTimeRef = useRef<number>(Date.now());
   const prevSlideRef = useRef<number | null>(null); // To track the previously active slide
@@ -75,22 +80,22 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
         customEvent('slide_time_spent', { slide_index: prevSlideRef.current, time_ms: finalTimeSpent });
       }
     };
-  }, []); // Added missing closing for the first useEffect
+  }, [customEvent]); // Added missing closing for the first useEffect
 
   // Effect for onboarding/help-overlay logic
   useEffect(() => {
     try {
-      const hasVisitedBefore = localStorage.getItem('hasVisitedWritingDemo');
+      const hasVisitedBefore = window.localStorage.getItem('hasVisitedWritingDemo');
       if (!hasVisitedBefore) {
-        setShowHelp(true);
-        localStorage.setItem('hasVisitedWritingDemo', 'true');
+        setHelpVisible(true, 'onboarding');
+        window.localStorage.setItem('hasVisitedWritingDemo', 'true');
       }
     } catch (error) {
       console.error('Failed to access localStorage:', error);
       // Optionally, handle the error more gracefully, e.g., by not showing help
       // or showing a fallback message. For now, just log.
     }
-  }, []);
+  }, [currentSlide, customEvent]);
 
   return (
     <div
@@ -154,8 +159,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             break;
           case '?':
             e.preventDefault();
-            setShowHelp((prev) => !prev);
-            customEvent('help_toggle', { action: showHelp ? 'hide' : 'show', current_slide: currentSlide });
+            setHelpVisible(!showHelp, 'keyboard');
             break;
           default:
             break;
@@ -178,7 +182,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             <li><span className="font-mono">?</span>: Toggle help</li>
           </ul>
           <button
-            onClick={() => setShowHelp(false)}
+            onClick={() => setHelpVisible(false, 'close_button')}
             className="absolute top-1 right-2 text-gray-400 hover:text-white focus:outline-none"
             aria-label="Close help"
           >
