@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { fadeIn, slideUp, staggerContainer } from '@/lib/animations';
 import OptimizedImage from '@/components/common/OptimizedImage';
 
+const MotionLink = motion(Link);
+
 export default function NotFound() {
   return (
     <motion.div
@@ -39,38 +41,35 @@ export default function NotFound() {
         variants={slideUp}
         className="relative z-10 text-lg text-gray-300 max-w-md mx-auto mb-8"
       >
-        Oops! The page you're looking for doesn't exist or has been moved.
-        Don't worry, we'll help you find your way back.
+        Oops! The page you&apos;re looking for doesn&apos;t exist or has been moved.
+        Don&apos;t worry, we&apos;ll help you find your way back.
       </motion.p>
 
       <motion.div
         variants={staggerContainer}
         className="relative z-10 flex flex-wrap justify-center gap-4 mb-12"
       >
-        <Link href="/" passHref>
-          <motion.a
-            variants={slideUp}
-            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-          >
-            Go to Homepage
-          </motion.a>
-        </Link>
-        <Link href="/#features" passHref>
-          <motion.a
-            variants={slideUp}
-            className="px-6 py-3 bg-gray-700 text-white font-semibold rounded-full shadow-lg hover:bg-gray-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-          >
-            Explore Features
-          </motion.a>
-        </Link>
-        <Link href="/contact" passHref>
-          <motion.a
-            variants={slideUp}
-            className="px-6 py-3 bg-gray-700 text-white font-semibold rounded-full shadow-lg hover:bg-gray-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-          >
-            Contact Us
-          </motion.a>
-        </Link>
+        <MotionLink
+          href="/"
+          variants={slideUp}
+          className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+        >
+          Go to Homepage
+        </MotionLink>
+        <MotionLink
+          href="/#features"
+          variants={slideUp}
+          className="px-6 py-3 bg-gray-700 text-white font-semibold rounded-full shadow-lg hover:bg-gray-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
+        >
+          Explore Features
+        </MotionLink>
+        <MotionLink
+          href="/contact"
+          variants={slideUp}
+          className="px-6 py-3 bg-gray-700 text-white font-semibold rounded-full shadow-lg hover:bg-gray-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
+        >
+          Contact Us
+        </MotionLink>
       </motion.div>
 
       <motion.div
