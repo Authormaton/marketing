@@ -73,10 +73,10 @@ const Footer: React.FC<FooterProps> = ({ loading = false }) => {
         <div className="flex flex-col items-center md:items-start gap-4">
           <h3 className="text-lg font-semibold text-gray-300">Connect With Us</h3>
           {loading ? (
-            <div className="flex gap-4 mt-2 animate-pulse">
-              <div className="w-8 h-8 bg-gray-700 rounded-full shimmer"></div>
-              <div className="w-8 h-8 bg-gray-700 rounded-full shimmer"></div>
-              <div className="w-8 h-8 bg-gray-700 rounded-full shimmer"></div>
+            <div role="status" aria-live="polite" className="flex gap-4 mt-2 animate-pulse">
+              <span className="sr-only">Loading social links</span>
+              <div className="w-6 h-6 bg-gray-700 rounded-full shimmer"></div>
+              <div className="w-6 h-6 bg-gray-700 rounded-full shimmer"></div>
             </div>
           ) : (
             <div className="flex gap-4 mt-2">
