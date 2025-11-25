@@ -87,7 +87,8 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
     try {
       const hasVisitedBefore = window.localStorage.getItem('hasVisitedWritingDemo');
       if (!hasVisitedBefore) {
-        setHelpVisible(true, 'onboarding');
+        setShowHelp(true);
+        customEvent('help_toggle', { action: 'show', source: 'onboarding' });
         window.localStorage.setItem('hasVisitedWritingDemo', 'true');
       }
     } catch (error) {
@@ -95,7 +96,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
       // Optionally, handle the error more gracefully, e.g., by not showing help
       // or showing a fallback message. For now, just log.
     }
-  }, [currentSlide, customEvent]);
+  }, []);
 
   return (
     <div
