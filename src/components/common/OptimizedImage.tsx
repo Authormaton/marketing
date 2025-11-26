@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React, { useState, useEffect, useCallback } from 'react';
 
-const DEFAULT_BLUR_SVG = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4IDU+PHJlY3QgZmlsbD0iI2UwZTBlMCIgd2lkdGg9IjgiIGhlaWdodD0iNSIvPjwvc3ZnPg==";
+const DEFAULT_BLUR_SVG = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4IDUiPjxyZWN0IGZpbGw9IiNlMGUwZTAiIHdpZHRoPSI4IiBoZWlnaHQ9IjUiLz48L3N2Zz4=";
 
 const log = {
   error: console.error,
@@ -53,8 +53,8 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
   fallbackSrc = "/file.svg", // Default fallback image
   defaultBlurDataURL = DEFAULT_BLUR_SVG,
 }) => {
-    const [hasError, setHasError] = useState(false);
-    const [fallbackHasError, setFallbackHasError] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [fallbackHasError, setFallbackHasError] = useState(false);
   const startTimeRef = React.useRef<number | null>(null);
   const finalBlurDataURL = blurDataURL ?? defaultBlurDataURL;
 
