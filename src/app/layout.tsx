@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ErrorBoundary from "../components/common/ErrorBoundary";
 import WebVitalsReporter from "../components/common/WebVitalsReporter";
+import { ToastProvider } from "@/hooks/useToast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,7 +72,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ErrorBoundary>{children}</ErrorBoundary>
+        <ErrorBoundary>
+          <ToastProvider>{children}</ToastProvider>
+        </ErrorBoundary>
         <WebVitalsReporter />
       </body>
     </html>
