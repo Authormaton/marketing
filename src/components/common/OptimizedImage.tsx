@@ -13,6 +13,10 @@ interface OptimizedImageProps {
   sizes?: string;
   priority?: boolean;
   blurDataURL?: string;
+  // A default blurDataURL for LQIP if not provided. In a production environment,
+  // this would typically be generated dynamically (e.g., during build time or on the server).
+  // This is a very small base64 encoded SVG.
+  defaultBlurDataURL?: string;
   onLoadingComplete?: (img: HTMLImageElement) => void;
   onImageError?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
   fallbackSrc?: string;
@@ -45,10 +49,12 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
   onLoadingComplete,
   onImageError,
   fallbackSrc = "/file.svg", // Default fallback image
+  defaultBlurDataURL = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4IDU+PHBhdGggZmlsbD0iI2YwZjBmMCIgZD0iTTAgMGg4djVIMHoiLz48cGF0aCBmaWxsPSIjY2NjIiBkPSJNMCAwSDh2NUgwelIgZmlsdGVyLXVybD0iI2ltYWdlIi8+PC9zdmc+",
 }) => {
   const [hasError, setHasError] = useState(false);
   const [fallbackHasError, setFallbackHasError] = useState(false);
   const startTimeRef = React.useRef<number | null>(null);
+  const finalBlurDataURL = blurDataURL || defaultBlurDataURL;
 
   useEffect(() => {
     setHasError(false);
@@ -109,7 +115,8 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
       fill={fill}
       sizes={sizes}
       priority={priority}
-      placeholder={blurDataURL ? "blur" : "empty"} {...(blurDataURL && { blurDataURL })}
+      placeholder="blur" // Always use blur placeholder for LQIP
+      blurDataURL={finalBlurDataURL}
       onLoadingComplete={handleLoadingComplete}
       onError={handleError}
     />
