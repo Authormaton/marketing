@@ -86,6 +86,9 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.5, transition: { duration: 0.2 } }}
         className={cn(toastVariants({ variant }), className)}
+        role={variant === "destructive" ? "alert" : "status"}
+        aria-live={variant === "destructive" ? "assertive" : "polite"}
+        aria-atomic="true"
         {...props}
       >
         <Icon />
