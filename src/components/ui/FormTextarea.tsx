@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
-interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+/**
+ * @typedef {object} FormTextareaProps
+ * @property {string} id - The unique identifier for the textarea.
+ * @property {string} name - The name attribute for the textarea.
+ * @property {string} [label] - The label for the textarea.
+ * @property {string} [error] - An error message to display.
+ * @property {string} [hint] - A hint message to display.
+ * @property {boolean} [showCharCount] - Whether to show the character count.
+ * @description This component is strictly controlled. It requires a `value` prop and an `onChange` handler.
+ */
+interface FormTextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'defaultValue'> {
   id: string;
   name: string;
   label?: string;
@@ -56,7 +66,7 @@ export const FormTextarea = React.forwardRef<HTMLTextAreaElement, FormTextareaPr
           aria-invalid={hasError || ariaInvalidProp ? "true" : undefined}
           aria-describedby={ariaDescribedBy || undefined}
           onChange={handleTextareaChange}
-          value={value}
+          {...(value !== undefined && { value })}
           {...props}
         />
         {showCharCount && maxLength && (
