@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import React, { useState, useEffect, useCallback } from 'react';
 
+const DEFAULT_BLUR_SVG = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4IDU+PHJlY3QgZmlsbD0iI2UwZTBlMCIgd2lkdGg9IjgiIGhlaWdodD0iNSIvPjwvc3ZnPg==";
+
 const log = {
   error: console.error,
   info: console.log,
@@ -49,23 +51,8 @@ const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
   onLoadingComplete,
   onImageError,
   fallbackSrc = "/file.svg", // Default fallback image
-  const DEFAULT_BLUR_SVG = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4IDU+PHBhdGggZmlsbD0iI2YwZjBmMCIgZD0iTTAgMGg4djVIMHoiLz48cGF0aCBmaWxsPSIjY2NjIiBkPSJNMCAwSDh2NUgwelIgZmlsdGVyLXVybD0iI2ltYWdlIi8+PC9zdmc+ ";
-  
-  const OptimizedImage: React.FC<CombinedOptimizedImageProps> = ({
-    src,
-    alt,
-    width,
-    height,
-    className,
-    fill = false,
-    sizes,
-    priority = false,
-    blurDataURL,
-    onLoadingComplete,
-    onImageError,
-    fallbackSrc = "/file.svg", // Default fallback image
-    defaultBlurDataURL = DEFAULT_BLUR_SVG,
-  }) => {
+  defaultBlurDataURL = DEFAULT_BLUR_SVG,
+}) => {
     const [hasError, setHasError] = useState(false);
     const [fallbackHasError, setFallbackHasError] = useState(false);
   const startTimeRef = React.useRef<number | null>(null);
