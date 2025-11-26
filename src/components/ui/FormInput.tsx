@@ -14,11 +14,14 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
   ({ id, name, label, error, hint, className, type = 'text', 'aria-describedby': ariaDescribedByProp, 'aria-invalid': ariaInvalidProp, showCharCount, onChange, value, ...props }, ref) => {
     const hasError = !!error;
     const maxLength = props.maxLength ? Number(props.maxLength) : undefined;
-    const [currentLength, setCurrentLength] = useState(String(value || '').length);
+    const isControlled = value != null;
+    const [currentLength, setCurrentLength] = useState(String(value ?? props.defaultValue ?? '').length);
 
     useEffect(() => {
-      setCurrentLength(String(value || '').length);
-    }, [value]);
+      if (isControlled) {
+        setCurrentLength(String(value || '').length);
+      }
+    }, [value, isControlled]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setCurrentLength(event.target.value.length);
