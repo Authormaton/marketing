@@ -70,14 +70,3 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
 });
 
 FormInput.displayName = 'FormInput';
-        />
-        {showCharCount && maxLength && (
-          <p className={cn("text-xs text-right", getCharCountColorClass())}>
-            {currentLength}/{maxLength} characters
-          </p>
-        )}
-        {hasError && <p id={`${id}-error`} role="alert" className="text-red-500 text-xs mt-1">{error}</p>}
-      </div>
-    );
-  }
-);
