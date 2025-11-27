@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Moon, Sun, Laptop } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type ThemeMode = "light" | "dark" | "system";
 
@@ -91,21 +92,44 @@ const DarkModeToggle = () => {
 
   const getIcon = () => {
     if (resolvedTheme === "dark") {
-      return <Moon className="h-5 w-5 text-gray-800 dark:text-gray-200" />;
+      return <Moon className="h-5 w-5" />;
     }
-    return <Sun className="h-5 w-5 text-gray-800 dark:text-gray-200" />;
+    return <Sun className="h-5 w-5" />;
   };
 
   return (
     <button
       onClick={toggleTheme}
       aria-label={getAriaLabel()}
-      className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 relative"
+      className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 relative group"
     >
-      {getIcon()}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={resolvedTheme}
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 20, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="text-gray-800 dark:text-gray-200"
+        >
+          {getIcon()}
+        </motion.div>
+      </AnimatePresence>
       {theme === "system" && (
         <Laptop className="absolute top-0 left-0 h-3 w-3 text-gray-500 dark:text-gray-400 -translate-x-1 translate-y-3" />
       )}
+      <AnimatePresence>
+        <motion.span
+          key={theme}
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 10 }}
+          transition={{ duration: 0.2 }}
+          className="absolute left-1/2 -translate-x-1/2 -bottom-6 text-xs text-gray-600 dark:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        >
+          {theme.charAt(0).toUpperCase() + theme.slice(1)}
+        </motion.span>
+      </AnimatePresence>
     </button>
   );
 };
