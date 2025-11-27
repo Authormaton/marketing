@@ -123,6 +123,8 @@ export const ContactForm = () => {
               onChange={handleChange}
               error={errors.name}
               disabled={loading}
+              showCharCount={true}
+              maxLength={50}
             />
             <FormInput
               id="email"
@@ -134,6 +136,8 @@ export const ContactForm = () => {
               onChange={handleChange}
               error={errors.email}
               disabled={loading}
+              showCharCount={true}
+              maxLength={100}
             />
             <FormTextarea
               id="message"
@@ -144,6 +148,8 @@ export const ContactForm = () => {
               onChange={handleChange}
               error={errors.message}
               disabled={loading}
+              showCharCount={true}
+              maxLength={500}
             />
             {successMessage && <p id="success-message" role="status" aria-live="polite" className="text-green-600 text-sm">{successMessage}</p>}
             {errorMessage && <p id="error-message" role="alert" aria-live="assertive" className="text-red-600 text-sm">{errorMessage}</p>}

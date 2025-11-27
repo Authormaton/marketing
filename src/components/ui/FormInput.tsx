@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -7,11 +7,35 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   hint?: string;
+  showCharCount?: boolean;
 }
 
 export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
-  ({ id, name, label, error, hint, className, type = 'text', 'aria-describedby': ariaDescribedByProp, 'aria-invalid': ariaInvalidProp, ...props }, ref) => {
+  ({ id, name, label, error, hint, className, type = 'text', 'aria-describedby': ariaDescribedByProp, 'aria-invalid': ariaInvalidProp, showCharCount, onChange, value, ...props }, ref) => {
     const hasError = !!error;
+    const maxLength = props.maxLength ? Number(props.maxLength) : undefined;
+    const isControlled = value != null;
+    const [currentLength, setCurrentLength] = useState(String(value ?? props.defaultValue ?? '').length);
+
+    useEffect(() => {
+      if (isControlled) {
+        setCurrentLength(String(value || '').length);
+      }
+    }, [value, isControlled]);
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setCurrentLength(event.target.value.length);
+      onChange?.(event);
+    };
+
+    const getCharCountColorClass = () => {
+      if (!maxLength) return '';
+      const percentage = (currentLength / maxLength) * 100;
+      if (percentage > 90) return 'text-red-500';
+      if (percentage > 70) return 'text-yellow-500';
+      return 'text-green-500';
+    };
+
     const ariaDescribedBy = cn(
       hint ? `${id}-hint` : '',
       hasError ? `${id}-error` : '',
@@ -34,12 +58,18 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
           )}
           aria-invalid={hasError || ariaInvalidProp ? "true" : undefined}
           aria-describedby={ariaDescribedBy || undefined}
+          onChange={handleInputChange}
+          {...(value !== undefined && { value })}
           {...props}
         />
-        {hasError && <p id={`${id}-error`} role="alert" className="text-red-500 text-xs mt-1">{error}</p>}
-      </div>
-    );
-  }
-);
+      {showCharCount && maxLength && (
+        <p className={cn("text-xs text-right", getCharCountColorClass())}>
+          {currentLength}/{maxLength} characters
+        </p>
+      )}
+      {hasError && <p id={`${id}-error`} role="alert" className="text-red-500 text-xs mt-1">{error}</p>}
+    </div>
+  );
+});
 
 FormInput.displayName = 'FormInput';

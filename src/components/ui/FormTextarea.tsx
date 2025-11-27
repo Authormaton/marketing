@@ -1,17 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
-interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+/**
+ * @typedef {object} FormTextareaProps
+ * @property {string} id - The unique identifier for the textarea.
+ * @property {string} name - The name attribute for the textarea.
+ * @property {string} [label] - The label for the textarea.
+ * @property {string} [error] - An error message to display.
+ * @property {string} [hint] - A hint message to display.
+ * @property {boolean} [showCharCount] - Whether to show the character count.
+ * @description This component is strictly controlled. It requires a `value` prop and an `onChange` handler.
+ */
+interface FormTextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'defaultValue'> {
   id: string;
   name: string;
   label?: string;
   error?: string;
   hint?: string;
+  showCharCount?: boolean;
 }
 
 export const FormTextarea = React.forwardRef<HTMLTextAreaElement, FormTextareaProps>(
-  ({ id, name, label, error, hint, className, rows = 4, 'aria-describedby': ariaDescribedByProp, 'aria-invalid': ariaInvalidProp, ...props }, ref) => {
+  ({ id, name, label, error, hint, className, rows = 4, 'aria-describedby': ariaDescribedByProp, 'aria-invalid': ariaInvalidProp, showCharCount, onChange, value, ...props }, ref) => {
     const hasError = !!error;
+    const maxLength = props.maxLength ? Number(props.maxLength) : undefined;
+    const [currentLength, setCurrentLength] = useState(String(value || '').length);
+
+    useEffect(() => {
+      setCurrentLength(String(value || '').length);
+    }, [value]);
+
+    const handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setCurrentLength(event.target.value.length);
+      onChange?.(event);
+    };
+
+    const getCharCountColorClass = () => {
+      if (!maxLength) return '';
+      const percentage = (currentLength / maxLength) * 100;
+      if (percentage > 90) return 'text-red-500';
+      if (percentage > 70) return 'text-yellow-500';
+      return 'text-green-500';
+    };
+
     const ariaDescribedBy = cn(
       hint ? `${id}-hint` : '',
       hasError ? `${id}-error` : '',
@@ -34,8 +65,15 @@ export const FormTextarea = React.forwardRef<HTMLTextAreaElement, FormTextareaPr
           )}
           aria-invalid={hasError || ariaInvalidProp ? "true" : undefined}
           aria-describedby={ariaDescribedBy || undefined}
+          onChange={handleTextareaChange}
+          {...(value !== undefined && { value })}
           {...props}
         />
+        {showCharCount && maxLength && (
+          <p className={cn("text-xs text-right", getCharCountColorClass())}>
+            {currentLength}/{maxLength} characters
+          </p>
+        )}
         {hasError && <p id={`${id}-error`} role="alert" className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
     );
