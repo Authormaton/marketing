@@ -1,3 +1,7 @@
+html {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
