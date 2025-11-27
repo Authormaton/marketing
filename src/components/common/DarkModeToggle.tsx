@@ -121,11 +121,12 @@ const DarkModeToggle = () => {
       <AnimatePresence>
         <motion.span
           key={theme}
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 10 }}
+          initial={{ x: -10 }}
+          animate={{ x: 0 }}
+          exit={{ x: 10 }}
           transition={{ duration: 0.2 }}
           className="absolute left-1/2 -translate-x-1/2 -bottom-6 text-xs text-gray-600 dark:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+          aria-hidden="true"
         >
           {theme.charAt(0).toUpperCase() + theme.slice(1)}
         </motion.span>
