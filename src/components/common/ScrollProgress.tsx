@@ -21,7 +21,7 @@ interface ScrollProgressProps {
   backgroundColor?: string;
   /**
    * The z-index of the progress bar to ensure it stays on top.
-   * @default 50
+   * @default 51
    */
   zIndex?: number;
 }
