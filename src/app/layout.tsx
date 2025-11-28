@@ -4,6 +4,7 @@ import "./globals.css";
 import ErrorBoundary from "../components/common/ErrorBoundary";
 import WebVitalsReporter from "../components/common/WebVitalsReporter";
 import { ToastProvider } from "@/hooks/useToast";
+import ScrollProgress from "../components/common/ScrollProgress";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -72,6 +73,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ScrollProgress />
         <ErrorBoundary>
           <ToastProvider>{children}</ToastProvider>
         </ErrorBoundary>
