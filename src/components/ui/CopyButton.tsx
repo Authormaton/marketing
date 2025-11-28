@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Copy, Check } from "lucide-react";
 import { Button } from "./button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "react-tooltip"; // Assuming react-tooltip is installed or will be.
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 
 interface CopyButtonProps {
   textToCopy: string;
@@ -12,12 +12,24 @@ interface CopyButtonProps {
 
 export const CopyButton = ({ textToCopy, className }: CopyButtonProps) => {
   const [hasCopied, setHasCopied] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(textToCopy);
       setHasCopied(true);
-      setTimeout(() => setHasCopied(false), 2000); // Reset after 2 seconds
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = window.setTimeout(() => setHasCopied(false), 2000); // Reset after 2 seconds
     } catch (err) {
       console.error("Failed to copy:", err);
     }
