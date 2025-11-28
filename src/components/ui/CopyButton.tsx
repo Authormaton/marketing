@@ -30,7 +30,11 @@ export const CopyButton = ({ textToCopy, className }: CopyButtonProps) => {
   const copyToClipboard = async () => {
     if (!navigator.clipboard) {
       console.error("Clipboard API not available.");
+      setHasCopied(false); // Reset success state
       setShowError(true);
+      if (timeoutRef.current) { // Clear any existing success timeout
+        clearTimeout(timeoutRef.current);
+      }
       if (errorTimeoutRef.current) {
         clearTimeout(errorTimeoutRef.current);
       }
@@ -41,13 +45,21 @@ export const CopyButton = ({ textToCopy, className }: CopyButtonProps) => {
     try {
       await navigator.clipboard.writeText(textToCopy);
       setHasCopied(true);
+      setShowError(false); // Clear any existing error state
+      if (errorTimeoutRef.current) { // Clear any existing error timeout
+        clearTimeout(errorTimeoutRef.current);
+      }
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
       timeoutRef.current = window.setTimeout(() => setHasCopied(false), 2000); // Reset after 2 seconds
     } catch (err) {
       console.error("Failed to copy:", err);
+      setHasCopied(false); // Reset success state
       setShowError(true);
+      if (timeoutRef.current) { // Clear any existing success timeout
+        clearTimeout(timeoutRef.current);
+      }
       if (errorTimeoutRef.current) {
         clearTimeout(errorTimeoutRef.current);
       }
