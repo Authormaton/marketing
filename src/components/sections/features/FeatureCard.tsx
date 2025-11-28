@@ -1,5 +1,6 @@
 import React from 'react';
 import OptimizedImage from '@/components/common/OptimizedImage';
+import { Badge } from '@/components/ui/badge';
 
 interface FeatureCardProps {
   imageSrc?: string;
@@ -9,9 +10,10 @@ interface FeatureCardProps {
   description: string;
   imageAlt?: string;
   loading?: boolean;
+  status?: { text: string; variant: "default" | "primary" | "secondary" | "success" | "warning" | "danger"; };
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = React.memo(({ imageSrc, icon, title, subtitle, description, imageAlt, loading = false }) => {
+const FeatureCard: React.FC<FeatureCardProps> = React.memo(({ imageSrc, icon, title, subtitle, description, imageAlt, loading = false, status }) => {
   const titleId = `feature-card-title-${title.replace(/\s+/g, '-').toLowerCase()}`;
 
   if (loading) {
@@ -46,7 +48,10 @@ const FeatureCard: React.FC<FeatureCardProps> = React.memo(({ imageSrc, icon, ti
           )}
         </div>
         <div className="flex-1">
-          <h3 id={titleId} className="text-white text-2xl font-semibold mb-1 tracking-tight drop-shadow-sm">{title}</h3>
+          <div className="flex items-center gap-2">
+            <h3 id={titleId} className="text-white text-2xl font-semibold mb-1 tracking-tight drop-shadow-sm">{title}</h3>
+            {status && <Badge variant={status.variant}>{status.text}</Badge>}
+          </div>
           <p className="text-purple-300 text-sm mb-2 font-medium">{subtitle}</p>
           <p className="text-gray-300 text-base leading-relaxed">{description}</p>
         </div>
