@@ -7,6 +7,7 @@ export type Feature =
       title: string;
       subtitle: string;
       description: string;
+      status?: { text: string; variant: "default" | "primary" | "secondary" | "success" | "warning" | "danger"; };
     }
   | {
       icon?: never;
@@ -15,6 +16,7 @@ export type Feature =
       title: string;
       subtitle: string;
       description: string;
+      status?: { text: string; variant: "default" | "primary" | "secondary" | "success" | "warning" | "danger"; };
     };
 
 export const features: Feature[] = [
@@ -23,25 +25,29 @@ export const features: Feature[] = [
     imageAlt: 'Human-Quality Writing icon',
     title: 'Human-Quality Writing',
     subtitle: 'Expert-level content generation',
-    description: 'AI-powered writing that matches the depth and nuance of human experts, with perfect technical accuracy for Web3 content.'
+    description: 'AI-powered writing that matches the depth and nuance of human experts, with perfect technical accuracy for Web3 content.',
+    status: { text: 'New', variant: 'primary' }
   },
   {
     imageSrc: '/globe.svg',
     imageAlt: 'Verifiable Synthesis icon',
     title: 'Verifiable Synthesis',
     subtitle: 'Transparent source validation',
-    description: 'Every claim is backed by verifiable sources with full traceability, ensuring content reliability and building community trust.'
+    description: 'Every claim is backed by verifiable sources with full traceability, ensuring content reliability and building community trust.',
+    status: { text: 'Beta', variant: 'secondary' }
   },
   {
     icon: '🔄',
     title: 'Multi-Agent Workflows',
     subtitle: 'Collaborative AI intelligence',
-    description: 'Specialized AI agents work together seamlessly - research, analysis, writing, and review - like a coordinated expert team.'
+    description: 'Specialized AI agents work together seamlessly - research, analysis, writing, and review - like a coordinated expert team.',
+    status: { text: 'Stable', variant: 'success' }
   },
   {
     icon: '👥',
     title: 'Human-AI Collaboration',
     subtitle: 'Augmented expertise',
-    description: 'Perfect harmony between AI efficiency and human insight, allowing experts to focus on strategy while AI handles execution.'
+    description: 'Perfect harmony between AI efficiency and human insight, allowing experts to focus on strategy while AI handles execution.',
+    status: { text: 'Upcoming', variant: 'warning' }
   }
 ];
