@@ -76,27 +76,29 @@ class ErrorBoundary extends Component<Props, State> {
         30000 // Cap the exponential backoff at 30 seconds
       );
 
-      if (nextRetryCount > this.MAX_RETRIES) {
-        // After max retries, force a page reload
+      return {
+        ...prevState, // Keep previous state for now
+        retryCount: nextRetryCount,
+        retryDelay: nextRetryDelay,
+      };
+    }, () => { // Callback after setState completes, using updated state
+      if (this.state.retryCount >= this.MAX_RETRIES) { // Check the updated state
         errorLogger.addBreadcrumb({
           message: 'Max retries reached, forcing page reload.',
           level: 'warning',
         });
-        return { ...prevState, hasError: true }; // Keep error state visible until reload
-      }
-
-      return {
-        hasError: false,
-        error: null,
-        errorInfo: null,
-        retryKey: prevState.retryKey + 1,
-        retryCount: nextRetryCount,
-        retryDelay: nextRetryDelay,
-        showDetails: false, // Hide details on retry
-      };
-    }, () => { // Callback after setState completes
-      if (this.state.retryCount > this.MAX_RETRIES) { // Check the updated state
         setTimeout(() => window.location.reload(), 1000);
+      } else {
+        // Apply exponential backoff before resetting the error state
+        setTimeout(() => {
+          this.setState((prevState) => ({
+            hasError: false,
+            error: null,
+            errorInfo: null,
+            retryKey: prevState.retryKey + 1,
+            showDetails: false, // Hide details on retry
+          }));
+        }, this.state.retryDelay); // Use the stored nextRetryDelay for the actual backoff
       }
     });
   };
