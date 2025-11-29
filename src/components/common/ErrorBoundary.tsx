@@ -75,9 +75,6 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   private handleRetry = () => {
-    // Clear existing breadcrumbs before retrying
-    errorLogger.clearBreadcrumbs();
-
     this.setState((prevState) => {
       const nextRetryCount = prevState.retryCount + 1;
       const nextRetryDelay = Math.min(
