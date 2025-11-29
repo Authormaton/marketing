@@ -173,7 +173,8 @@ export const errorLogger = {
       return;
     }
     sendErrorToService(error, errorPayload);
-    breadcrumbs = []; // Clear breadcrumbs after capturing an error
+    // Do not clear breadcrumbs here if we want them to persist for the 'Report Issue' button in ErrorBoundary
+    // breadcrumbs = []; // Clear breadcrumbs after capturing an error
   },
 
   /**
@@ -207,9 +208,26 @@ export const errorLogger = {
     contextMap = { ...contextMap, [key]: value };
     console.log('Context Set:', key, value);
   },
+
+  /**
+   * Returns the current list of breadcrumbs.
+   */
+  getBreadcrumbs(): Breadcrumb[] {
+    return [...breadcrumbs];
+  },
+
+  /**
+   * Clears all current breadcrumbs.
+   */
+  clearBreadcrumbs() {
+    breadcrumbs = [];
+  },
+
+  /**
+   * Returns the current user context.
+   */
+  getCurrentUserContext(): ErrorMetadata['user'] {
+    return currentUser;
+  },
 };
 
-// Initial check for queued errors on load
-if (isOnline) {
-  sendQueuedErrors();
-}
