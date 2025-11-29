@@ -165,7 +165,7 @@ class ErrorBoundary extends Component<Props, State> {
 
           {showDetails && (
             <div className="bg-gray-200 dark:bg-gray-800 p-6 rounded-lg shadow-inner w-full max-w-2xl text-left">
-              <h2 classNameNamestring="text-xl font-semibold mb-2">Error Details</h2>
+              <h2 className="text-xl font-semibold mb-2">Error Details</h2>
               {error && (
                 <div className="mb-4">
                   <h3 className="text-lg font-medium">Message:</h3>
