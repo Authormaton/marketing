@@ -1,13 +1,7 @@
 'use client';
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-
-interface Props {
-  children: ReactNode;
-}
-
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { errorLogger, Breadcrumb } from '@/lib/errorLogging'; // Assuming '@/lib/errorLogging' resolves correctly
+import { errorLogger, Breadcrumb } from '@/lib/errorLogging';
 
 interface Props {
   children: ReactNode;
@@ -88,7 +82,6 @@ class ErrorBoundary extends Component<Props, State> {
           message: 'Max retries reached, forcing page reload.',
           level: 'warning',
         });
-        setTimeout(() => window.location.reload(), 1000);
         return { ...prevState, hasError: true }; // Keep error state visible until reload
       }
 
@@ -101,6 +94,10 @@ class ErrorBoundary extends Component<Props, State> {
         retryDelay: nextRetryDelay,
         showDetails: false, // Hide details on retry
       };
+    }, () => { // Callback after setState completes
+      if (this.state.retryCount > this.MAX_RETRIES) { // Check the updated state
+        setTimeout(() => window.location.reload(), 1000);
+      }
     });
   };
 
