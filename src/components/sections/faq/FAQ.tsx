@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, KeyboardEvent, useRef, useEffect } from "react";
+import React, { useState, KeyboardEvent, useRef, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import FAQItem from "./FAQItem";
 import { faqData, FAQItemData } from "./faqData";
@@ -11,12 +11,15 @@ const FAQ: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [openItemId, setOpenItemId] = useState<string | null>(null);
   const faqRefs = useRef<Record<string, HTMLDivElement>>({});
+  const isInitialMount = useRef(true);
 
-  const filteredFaqs = faqData.filter(
-    (faq) =>
-      faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredFaqs = useMemo(() => {
+    return faqData.filter(
+      (faq) =>
+        faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm]);
 
   const handleToggle = (id: string, isOpen: boolean) => {
     setOpenItemId(isOpen ? id : null);
@@ -35,7 +38,7 @@ const FAQ: React.FC = () => {
 
     // Do not interfere with typing in input fields.
     const target = event.target as HTMLElement;
-    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
       return;
     }
 
@@ -44,10 +47,18 @@ const FAQ: React.FC = () => {
 
     if (event.key === "ArrowDown") {
       event.preventDefault();
-      nextFocusIndex = (currentFocusIndex + 1) % filteredFaqs.length;
+      if (currentFocusIndex === -1) {
+        nextFocusIndex = 0; // Focus the first item if nothing is open
+      } else {
+        nextFocusIndex = (currentFocusIndex + 1) % filteredFaqs.length;
+      }
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
-      nextFocusIndex = (currentFocusIndex - 1 + filteredFaqs.length) % filteredFaqs.length;
+      if (currentFocusIndex === -1) {
+        nextFocusIndex = filteredFaqs.length - 1; // Focus the last item if nothing is open
+      } else {
+        nextFocusIndex = (currentFocusIndex - 1 + filteredFaqs.length) % filteredFaqs.length;
+      }
     }
 
     if (nextFocusIndex !== -1) {
@@ -68,15 +79,21 @@ const FAQ: React.FC = () => {
     if (openItemId && !filteredFaqs.some(faq => faq.id === openItemId)) {
       setOpenItemId(null);
     }
-    // If no item is open and there are filtered items, focus the first one.
-    // Only auto-open if the search term is empty, allowing users to collapse all items when searching.
-    if (!openItemId && filteredFaqs.length > 0 && searchTerm === '') {
+
+    // Only auto-open if it's the initial mount and the search term is empty.
+    // This allows users to collapse all items after the initial load or when searching.
+    if (isInitialMount.current && !openItemId && filteredFaqs.length > 0 && searchTerm === '') {
         const firstItemId = filteredFaqs[0].id;
         setOpenItemId(firstItemId);
         const elementToFocus = faqRefs.current[firstItemId]?.querySelector("button");
         if (elementToFocus instanceof HTMLElement) {
             elementToFocus.focus();
         }
+    }
+
+    // After the initial mount, set isInitialMount to false
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
     }
   }, [filteredFaqs, openItemId, searchTerm]);
 
