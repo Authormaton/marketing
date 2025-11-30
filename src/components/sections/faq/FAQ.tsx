@@ -101,6 +101,7 @@ const FAQ: React.FC = () => {
         <div className="mb-8">
           <Input
             type="text"
+            aria-label="Search FAQs"
             placeholder="Search FAQs..."
             value={searchTerm}
             onChange={handleSearchChange}
@@ -117,7 +118,6 @@ const FAQ: React.FC = () => {
                 }}
               >
                 <FAQItem
-                  key={faq.id}
                   id={faq.id}
                   question={faq.question}
                   answer={faq.answer}
