@@ -28,6 +28,17 @@ const FAQ: React.FC = () => {
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
+    // Do not navigate if there are no filtered FAQs.
+    if (filteredFaqs.length === 0) {
+      return;
+    }
+
+    // Do not interfere with typing in input fields.
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return;
+    }
+
     const currentFocusIndex = filteredFaqs.findIndex(faq => faq.id === openItemId);
     let nextFocusIndex = -1;
 
@@ -58,7 +69,8 @@ const FAQ: React.FC = () => {
       setOpenItemId(null);
     }
     // If no item is open and there are filtered items, focus the first one.
-    if (!openItemId && filteredFaqs.length > 0) {
+    // Only auto-open if the search term is empty, allowing users to collapse all items when searching.
+    if (!openItemId && filteredFaqs.length > 0 && searchTerm === '') {
         const firstItemId = filteredFaqs[0].id;
         setOpenItemId(firstItemId);
         const elementToFocus = faqRefs.current[firstItemId]?.querySelector("button");
@@ -66,7 +78,7 @@ const FAQ: React.FC = () => {
             elementToFocus.focus();
         }
     }
-  }, [filteredFaqs, openItemId]);
+  }, [filteredFaqs, openItemId, searchTerm]);
 
 
   return (
