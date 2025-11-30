@@ -13,7 +13,9 @@ export const useIntersectionObserver = (options?: IntersectionObserverHookOption
   const [isVisible, setIsVisible] = useState(false);
   const [intersectionRatio, setIntersectionRatio] = useState(0);
 
-  const { onVisibilityChange, onThresholdExceed, ...observerOptions } = options || {};
+  const { onVisibilityChange, onThresholdExceed, ...restOptions } = options || {};
+
+  const observerOptions = useMemo(() => restOptions, [restOptions]);
 
   const handleIntersect = useCallback(
     (entries: IntersectionObserverEntry[]) => {

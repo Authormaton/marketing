@@ -16,10 +16,7 @@ export const useInfiniteScroll = ({
   threshold = 0.1,
   rootMargin = "0px",
 }: InfiniteScrollOptions) => {
-  const loaderRef = useRef<HTMLDivElement>(null);
-
-  const { isVisible } = useIntersectionObserver({
-    ref: loaderRef, // Pass the ref from useInfiniteScroll to useIntersectionObserver
+  const { ref: loaderRef, isVisible } = useIntersectionObserver({
     threshold,
     rootMargin,
   });
