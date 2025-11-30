@@ -1,13 +1,42 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
-export const useIntersectionObserver = (options?: IntersectionObserverInit) => {
+type VisibilityCallback = (isVisible: boolean, entry: IntersectionObserverEntry) => void;
+type ThresholdCallback = (intersectionRatio: number, entry: IntersectionObserverEntry) => void;
+
+interface IntersectionObserverHookOptions extends IntersectionObserverInit {
+  onVisibilityChange?: VisibilityCallback;
+  onThresholdExceed?: ThresholdCallback;
+}
+
+export const useIntersectionObserver = (options?: IntersectionObserverHookOptions) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [intersectionRatio, setIntersectionRatio] = useState(0);
+
+  const { onVisibilityChange, onThresholdExceed, ...restOptions } = options || {};
+
+  const observerOptions = useMemo(() => restOptions, [restOptions]);
+
+  const handleIntersect = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      setIsVisible(entry.isIntersecting);
+      setIntersectionRatio(entry.intersectionRatio);
+
+      if (onVisibilityChange) {
+        onVisibilityChange(entry.isIntersecting, entry);
+      }
+
+      if (onThresholdExceed && (entry.intersectionRatio > 0 || entry.isIntersecting)) {
+        // Only trigger onThresholdExceed if ratio is greater than 0 or element is intersecting
+        onThresholdExceed(entry.intersectionRatio, entry);
+      }
+    },
+    [onVisibilityChange, onThresholdExceed]
+  );
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      setIsVisible(entry.isIntersecting);
-    }, options);
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
 
     const currentRef = ref.current;
     if (currentRef) {
@@ -19,7 +48,7 @@ export const useIntersectionObserver = (options?: IntersectionObserverInit) => {
         observer.unobserve(currentRef);
       }
     };
-  }, [options]);
+  }, [observerOptions, handleIntersect]);
 
-  return { ref, isVisible };
+  return { ref, isVisible, intersectionRatio };
 };
