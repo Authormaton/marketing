@@ -4,18 +4,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FormInput } from '@/components/ui/FormInput';
 import { FormTextarea } from '@/components/ui/FormTextarea';
-import { required, email, minLength, maxLength, validate, Validator } from '@/lib/validation';
+import { required, email, minLength, maxLength, isPhoneNumber, validate, Validator } from '@/lib/validation';
 
 interface FormData {
   name: string;
   email: string;
   message: string;
+  phoneNumber?: string;
 }
 
 interface FormErrors {
   name?: string;
   email?: string;
   message?: string;
+  phoneNumber?: string;
 }
 
 export const ContactForm = () => {
@@ -23,6 +25,7 @@ export const ContactForm = () => {
     name: '',
     email: '',
     message: '',
+    phoneNumber: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
@@ -65,6 +68,12 @@ export const ContactForm = () => {
       maxLength(500, 'Message must not exceed 500 characters'),
     ];
     newErrors.message = validate(formData.message, messageValidators);
+
+    const phoneNumberValidators = [
+      isPhoneNumber,
+      maxLength(20, 'Phone number must not exceed 20 characters'),
+    ];
+    newErrors.phoneNumber = validate(formData.phoneNumber || '', phoneNumberValidators);
 
     setErrors(newErrors); // Update the state with new errors
 
@@ -138,6 +147,19 @@ export const ContactForm = () => {
               disabled={loading}
               showCharCount={true}
               maxLength={100}
+            />
+            <FormInput
+              id="phoneNumber"
+              name="phoneNumber"
+              label="Phone Number (Optional)"
+              hint="Your phone number"
+              type="tel"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              error={errors.phoneNumber}
+              disabled={loading}
+              showCharCount={true}
+              maxLength={20}
             />
             <FormTextarea
               id="message"

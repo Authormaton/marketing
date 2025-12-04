@@ -72,6 +72,19 @@ export const maxLength = (max: number, message?: string): Validator => (value: s
   return undefined;
 };
 
+export const isPhoneNumber = (value: string): string | undefined => {
+  if (!value || value.trim() === '') {
+    return undefined; // Phone number is optional
+  }
+  // A simple regex for phone numbers. This can be refined based on specific requirements.
+  // This regex allows for optional '+' at the beginning, then digits, spaces, hyphens, and parentheses.
+  const phoneRegex = /^\+?[0-9\s\-()]{7,20}$/;
+  if (!phoneRegex.test(value)) {
+    return 'Please enter a valid phone number.';
+  }
+  return undefined;
+};
+
 export const validate = (value: string, validators: Validator[]): string | undefined => {
   for (const validator of validators) {
     const error = validator(value);
