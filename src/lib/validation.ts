@@ -85,6 +85,22 @@ export const isPhoneNumber = (value: string): string | undefined => {
   return undefined;
 };
 
+export const isValidUrl: Validator = (value: string) => {
+  if (!value || value.trim() === '') {
+    return 'URL cannot be empty.';
+  }
+  // Regex for URL validation:
+  // - Requires http:// or https://
+  // - Optionally allows www.
+  // - Requires a domain name with at least one dot (e.g., example.com, sub.example.co.uk)
+  // - Allows for paths, query parameters, and fragments
+  const urlRegex = /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
+  if (!urlRegex.test(value)) {
+    return 'Please enter a valid URL.';
+  }
+  return undefined;
+};
+
 export const validate = (value: string, validators: Validator[]): string | undefined => {
   for (const validator of validators) {
     const error = validator(value);
