@@ -1,4 +1,4 @@
-import { required, email, minLength, maxLength, validate, Validator } from './validation';
+import { required, email, minLength, maxLength, validate, Validator, isValidUrl } from './validation';
 
 describe('Validation Utilities', () => {
   // Test for 'required' validator
@@ -90,6 +90,77 @@ describe('Validation Utilities', () => {
 
     it('should return undefined for an empty string', () => {
       expect(maxLen10('')).toBeUndefined();
+    });
+  });
+
+  // Test for 'isValidUrl' validator
+  describe('isValidUrl', () => {
+    it('should return undefined for a valid http URL', () => {
+      expect(isValidUrl('http://example.com')).toBeUndefined();
+    });
+
+    it('should return undefined for a valid https URL', () => {
+      expect(isValidUrl('https://example.com')).toBeUndefined();
+    });
+
+    it('should return undefined for a valid URL with www prefix', () => {
+      expect(isValidUrl('https://www.example.com')).toBeUndefined();
+    });
+
+    it('should return undefined for a valid URL with a path', () => {
+      expect(isValidUrl('https://example.com/path/to/page')).toBeUndefined();
+    });
+
+    it('should return undefined for a valid URL with query parameters', () => {
+      expect(isValidUrl('https://example.com/search?q=test&page=1')).toBeUndefined();
+    });
+
+    it('should return undefined for a valid URL with a fragment', () => {
+      expect(isValidUrl('https://example.com/page#section')).toBeUndefined();
+    });
+
+    it('should return undefined for a valid URL with subdomain', () => {
+      expect(isValidUrl('https://sub.example.com')).toBeUndefined();
+    });
+
+    it('should return undefined for a valid URL with multiple subdomains', () => {
+      expect(isValidUrl('https://sub.sub.example.com')).toBeUndefined();
+    });
+
+    it('should return "Please enter a valid URL." for a URL with a numeric TLD', () => {
+      expect(isValidUrl('https://example.123')).toBe('Please enter a valid URL.');
+    });
+
+    it('should return "Please enter a valid URL." for a URL with a TLD longer than 6 characters', () => {
+      expect(isValidUrl('https://example.network')).toBe('Please enter a valid URL.');
+    });
+
+    it('should return "URL cannot be empty." for an empty string', () => {
+      expect(isValidUrl('')).toBe('URL cannot be empty.');
+    });
+
+    it('should return "URL cannot be empty." for a whitespace-only string', () => {
+      expect(isValidUrl('   ')).toBe('URL cannot be empty.');
+    });
+
+    it('should return "Please enter a valid URL." for a URL missing protocol', () => {
+      expect(isValidUrl('example.com')).toBe('Please enter a valid URL.');
+    });
+
+    it('should return "Please enter a valid URL." for an invalid top-level domain', () => {
+      expect(isValidUrl('https://example.c')).toBe('Please enter a valid URL.');
+    });
+
+    it('should return "Please enter a valid URL." for a URL with invalid characters', () => {
+      expect(isValidUrl('https://ex ample.com')).toBe('Please enter a valid URL.');
+    });
+
+    it('should return "Please enter a valid URL." for a URL with only protocol', () => {
+      expect(isValidUrl('https://')).toBe('Please enter a valid URL.');
+    });
+
+    it('should return "Please enter a valid URL." for a URL with an invalid domain format', () => {
+      expect(isValidUrl('https://.com')).toBe('Please enter a valid URL.');
     });
   });
 
