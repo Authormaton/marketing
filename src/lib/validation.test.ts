@@ -127,6 +127,14 @@ describe('Validation Utilities', () => {
       expect(isValidUrl('https://sub.sub.example.com')).toBeUndefined();
     });
 
+    it('should return "Please enter a valid URL." for a URL with a numeric TLD', () => {
+      expect(isValidUrl('https://example.123')).toBe('Please enter a valid URL.');
+    });
+
+    it('should return "Please enter a valid URL." for a URL with a TLD longer than 6 characters', () => {
+      expect(isValidUrl('https://example.network')).toBe('Please enter a valid URL.');
+    });
+
     it('should return "URL cannot be empty." for an empty string', () => {
       expect(isValidUrl('')).toBe('URL cannot be empty.');
     });
