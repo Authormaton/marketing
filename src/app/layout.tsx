@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ErrorBoundary from "../components/common/ErrorBoundary";
-import WebVitalsReporter from "../components/common/WebVitalsReporter";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
+import WebVitalsReporter from "@/components/common/WebVitalsReporter";
 import { ToastProvider } from "@/hooks/useToast";
-import ScrollProgress from "../components/common/ScrollProgress";
+import ScrollProgress from "@/components/common/ScrollProgress";
+import { AUTHORMATION_LOGO_PATH } from "@/lib/metadata";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
     siteName: "Authormaton",
     images: [
       {
-        url: "/public/bg.png",
+        url: AUTHORMATION_LOGO_PATH,
         width: 1200,
         height: 630,
         alt: "Authormaton AI Platform",
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
       "Specialized, autonomous agents for technical content generation. Factual synthesis, data accuracy, and human-centric style.",
     site: "@authormaton",
     creator: "@authormaton",
-    images: ["/public/bg.png"],
+    images: [AUTHORMATION_LOGO_PATH],
   },
 };
 

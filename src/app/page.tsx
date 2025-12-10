@@ -4,7 +4,9 @@ import Hero from '@/components/sections/hero/Hero';
 import Features from '@/components/sections/features/Features';
 import ContentCrisis from '@/components/sections/content-crisis/ContentCrisis';
 
-const HomePage: FC = () => {
+interface HomePageProps {}
+
+const HomePage: FC<HomePageProps> = () => {
   return (
     <main>
       <Hero />
