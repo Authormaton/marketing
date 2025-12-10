@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 
+const AUTHORMATION_LOGO_PATH = '/bg.png';
+
 interface SEOProps {
   title: string;
   description: string;
@@ -35,7 +37,7 @@ export function getOrganizationSchema() {
     '@type': 'Organization',
     name: 'Authormaton',
     url: 'https://www.authormaton.com',
-    logo: 'https://www.authormaton.com/next.svg', // Placeholder: Replace with actual Authormaton logo path
+    logo: `https://www.authormaton.com${AUTHORMATION_LOGO_PATH}`, // Use the centralized logo path
     sameAs: [
       'https://twitter.com/authormaton', // Placeholder: Replace with actual Twitter profile
       'https://www.linkedin.com/company/authormaton', // Placeholder: Replace with actual LinkedIn profile
