@@ -35,6 +35,18 @@ export const ContactForm = () => {
   const successMessageRef = useRef<HTMLParagraphElement>(null);
   const errorMessageRef = useRef<HTMLParagraphElement>(null);
 
+  useEffect(() => {
+    if (successMessage && successMessageRef.current) {
+      successMessageRef.current.focus();
+    }
+  }, [successMessage]);
+
+  useEffect(() => {
+    if (errorMessage && errorMessageRef.current) {
+      errorMessageRef.current.focus();
+    }
+  }, [errorMessage]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -173,8 +185,8 @@ export const ContactForm = () => {
               showCharCount={true}
               maxLength={500}
             />
-            {successMessage && <p id="success-message" role="status" aria-live="polite" className="text-green-600 text-sm">{successMessage}</p>}
-            {errorMessage && <p id="error-message" role="alert" aria-live="assertive" className="text-red-600 text-sm">{errorMessage}</p>}
+            {successMessage && <p id="success-message" ref={successMessageRef} role="status" aria-live="polite" className="text-green-600 text-sm" tabIndex={-1}>{successMessage}</p>}
+            {errorMessage && <p id="error-message" ref={errorMessageRef} role="alert" aria-live="assertive" className="text-red-600 text-sm" tabIndex={-1}>{errorMessage}</p>}
             <div aria-live="polite" aria-atomic="true" className="sr-only">
               {loading ? 'Sending message...' : ''}
             </div>
