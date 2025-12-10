@@ -208,12 +208,25 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
               <div className="h-4 bg-gray-700 rounded w-3/4"></div>
             </div>
 
-            {/* Skeleton for Slide Indicators */}
-            <div className="flex justify-center gap-2 mt-8">
-              <div className="w-2 h-2 rounded-full bg-gray-700"></div>
-              <div className="w-2 h-2 rounded-full bg-gray-700"></div>
-              <div className="w-2 h-2 rounded-full bg-gray-700"></div>
-              <div className="w-2 h-2 rounded-full bg-gray-700"></div>
+            {/* Slide Indicators */}
+            <div className="flex justify-center gap-2 mt-8" role="group" aria-label="Slide indicators">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  aria-label={`Go to slide ${index + 1}`}
+                  aria-current={index === currentSlide ? 'true' : undefined}
+                  onClick={() => {
+                    const fromSlide = currentSlide; // Capture current slide before update
+                    setCurrentSlide(index);
+                    setIsPaused(true);
+                    setIsExplicitPause(false);
+                    scheduleResume();
+                    customEvent('slide_navigation', { direction: 'direct', from_slide: fromSlide, to_slide: index });
+                  }}
+                  className={`w-2 h-2 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${index === currentSlide ? 'bg-purple-500' : 'bg-gray-700'}`}
+                />
+              ))}
             </div>
           </div>
         ) : (
