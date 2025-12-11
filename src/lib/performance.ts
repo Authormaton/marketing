@@ -1,4 +1,4 @@
-import { onCLS, onINP, onLCP, Metric } from 'web-vitals';
+import { onCLS, onFCP, onINP, onLCP, onTTFB, Metric } from 'web-vitals';
 
 const reportWebVitals = (onReport?: (metric: Metric) => void) => {
   onCLS(metric => {
