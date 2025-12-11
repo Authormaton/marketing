@@ -15,8 +15,8 @@ export function CrisisCard({ icon, title, description }: CrisisCardProps) {
     <motion.div
       className="w-full sm:w-auto sm:min-w-[280px] bg-[#121225] p-6 rounded-lg border border-[#252542] shadow-lg flex-grow"
       variants={slideUp}
-      whileHover={{ scale: 1.03, boxShadow: "0 0 30px rgba(0, 0, 0, 0.5)" }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      whileHover={{ scale: 1.03, y: -5, boxShadow: "0 0 30px rgba(0, 0, 0, 0.5)" }}
+      transition={{ type: "spring", stiffness: 300, damping: 10 }}
     >
       <div className="bg-[#18162A] w-16 h-16 rounded-lg flex items-center justify-center mb-6" aria-hidden="true">
         {icon}
