@@ -50,6 +50,7 @@ export default function Hero() {
         href="#features"
         className="relative z-10 mt-8 px-8 py-3 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 flex items-center justify-center"
         onClick={() => buttonClick('Hero CTA Button')}
+        aria-label="Learn more about Authormaton features"
       >
         Learn More
       </motion.a>

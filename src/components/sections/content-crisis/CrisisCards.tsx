@@ -18,7 +18,7 @@ export function CrisisCard({ icon, title, description }: CrisisCardProps) {
       whileHover={{ scale: 1.03, boxShadow: "0 0 30px rgba(0, 0, 0, 0.5)" }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
-      <div className="bg-[#18162A] w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+      <div className="bg-[#18162A] w-16 h-16 rounded-lg flex items-center justify-center mb-6" aria-hidden="true">
         {icon}
       </div>
       <h3 className="text-xl font-semibold mb-3">{title}</h3>
