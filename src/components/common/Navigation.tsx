@@ -100,6 +100,47 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
     { href: '#contact', label: 'Contact' },
   ];
 
+  const menuVariants = {
+    closed: {
+      x: '100%',
+      transition: {
+        type: 'spring',
+        damping: 30,
+        stiffness: 300,
+        when: "afterChildren"
+      }
+    },
+    open: {
+      x: 0,
+      transition: {
+        type: 'spring',
+        damping: 30,
+        stiffness: 300,
+        when: "beforeChildren",
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const staggerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.07,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const linkVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
+  };
+
   return (
     <nav aria-label="Main navigation" aria-busy={loading} className="fixed top-0 z-50 w-full bg-white/5 backdrop-blur-sm">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:bg-white focus:p-2 focus:text-blue-600">Skip to content</a>
@@ -179,17 +220,17 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
         </div>
 
         <AnimatePresence>
-          {isOpen && ( // This will be isOpen
+          {isOpen && (
             <motion.nav
               ref={menuRef}
               id="mobile-menu"
               aria-label="Mobile navigation"
               aria-modal="true"
               role="dialog"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={menuVariants}
               className="fixed inset-y-0 right-0 w-64 bg-gray-800 dark:bg-gray-900 p-4 shadow-lg z-50 flex flex-col md:hidden"
             >
               <div className="flex justify-end mb-4">
@@ -214,14 +255,20 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
                   </svg>
                 </button>
               </div>
-              <div className="flex flex-col gap-4">
+              <motion.div
+                className="flex flex-col gap-4"
+                variants={staggerVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 {navLinks.map((link) => (
                   loading ? (
-                    <div key={link.href} className="w-full h-8 bg-gray-700 rounded animate-pulse"></div>
+                    <motion.div key={link.href} variants={linkVariants} className="w-full h-8 bg-gray-700 rounded animate-pulse"></motion.div>
                   ) : (
-                    <a
+                    <motion.a
                       key={link.href}
                       href={link.href}
+                      variants={linkVariants}
                       className="text-white text-lg hover:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={() => {
                         buttonClick(`Nav Link: ${link.label}`);
@@ -229,20 +276,25 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
                       }}
                     >
                       {link.label}
-                    </a>
+                    </motion.a>
                   )
                 ))}
                 {loading ? (
-                  <div className="w-full h-10 bg-gray-700 rounded-full animate-pulse"></div>
+                  <motion.div variants={linkVariants} className="w-full h-10 bg-gray-700 rounded-full animate-pulse"></motion.div>
                 ) : (
-                  <Link href="/demo" className="bg-blue-600 text-white px-4 py-2 rounded-full font-semibold shadow hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 text-center" onClick={() => {
-                    buttonClick('Request Demo Button');
-                    toggleMenu();
-                  }}>
+                  <motion.custom(Link)
+                    href="/demo"
+                    variants={linkVariants}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-full font-semibold shadow hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 text-center"
+                    onClick={() => {
+                      buttonClick('Request Demo Button');
+                      toggleMenu();
+                    }}
+                  >
                     Request Demo
-                  </Link>
+                  </motion.custom(Link)>
                 )}
-              </div>
+              </motion.div>
             </motion.nav>
           )}
         </AnimatePresence>
