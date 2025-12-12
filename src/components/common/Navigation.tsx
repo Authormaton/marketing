@@ -287,7 +287,7 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
                   >
                     <Link
                       href="/demo"
-                      className="bg-blue-600 text-white px-4 py-2 rounded-full font-semibold shadow hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 text-center"
+                      className="bg-blue-600 text-white px-4 py-2 rounded-full font-semibold shadow hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 text-center block w-full"
                       onClick={() => {
                         buttonClick('Request Demo Button');
                         toggleMenu();
