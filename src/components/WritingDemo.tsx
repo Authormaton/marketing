@@ -196,7 +196,7 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
       </h2>
       <div className="relative bg-black/40 rounded-3xl p-8 overflow-hidden shadow-[0_0_30px_rgba(139,92,246,0.1)]">
         {loading ? (
-          <div className="animate-pulse" aria-busy="true" role="progressbar">
+          <div className="animate-pulse motion-reduce:animate-none" aria-busy="true" role="progressbar">
             {/* Skeleton for Robot Avatar */}
             <div className="w-full h-24 bg-gray-700 rounded-xl mb-8"></div>
 

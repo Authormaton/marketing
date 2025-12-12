@@ -147,7 +147,7 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
       <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-2">
           {loading ? (
-            <div className="w-32 h-8 bg-gray-700 rounded animate-pulse"></div>
+            <div className="w-32 h-8 bg-gray-700 rounded animate-pulse motion-reduce:animate-none"></div>
           ) : (
             <span className="font-bold text-2xl bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
               Authormaton
@@ -159,7 +159,7 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
         <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             loading ? (
-              <div key={link.href} className="w-20 h-6 bg-gray-700 rounded animate-pulse"></div>
+              <div key={link.href} className="w-20 h-6 bg-gray-700 rounded animate-pulse motion-reduce:animate-none"></div>
             ) : (
               <a
                 key={link.href}
@@ -174,7 +174,7 @@ export default function Navigation({ loading = false }: { loading?: boolean }) {
           ))}
           {loading ? (
             <div className="flex items-center gap-4">
-              <div className="w-32 h-10 bg-gray-700 rounded-full animate-pulse"></div>
+              <div className="w-32 h-10 bg-gray-700 rounded-full animate-pulse motion-reduce:animate-none"></div>
               <div className="w-10 h-10 bg-gray-700 rounded-full animate-pulse"></div>
             </div>
           ) : (
