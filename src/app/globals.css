@@ -193,4 +193,10 @@ html {
   .animate-glow {
     animation: glow 1.5s infinite ease-in-out;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-glow {
+      animation: none;
+    }
+  }
 }
