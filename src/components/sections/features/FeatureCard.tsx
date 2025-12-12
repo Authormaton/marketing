@@ -19,7 +19,7 @@ const FeatureCard: React.FC<FeatureCardProps> = React.memo(({ imageSrc, icon, ti
   if (loading) {
     return (
       <div className="relative w-full bg-gradient-to-br from-black/30 via-black/10 to-purple-900/10 border border-purple-800/30 shadow-xl rounded-2xl p-7 overflow-hidden">
-        <div className="flex gap-5 items-center animate-pulse">
+        <div className="flex gap-5 items-center animate-pulse motion-reduce:animate-none">
           <div className="w-14 h-14 bg-gray-700 rounded-xl shimmer"></div>
           <div className="flex-1 space-y-2">
             <div className="h-6 bg-gray-700 rounded w-3/4 shimmer"></div>

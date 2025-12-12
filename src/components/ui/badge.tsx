@@ -48,7 +48,7 @@ function Badge({ className, variant, size, pulse, glow, ...props }: BadgeProps) 
       className={cn(
         badgeVariants({ variant, size }),
         {
-          "animate-pulse": pulse,
+          "animate-pulse motion-reduce:animate-none": pulse,
           "animate-glow": glow,
         },
         className

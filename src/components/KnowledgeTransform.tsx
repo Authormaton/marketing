@@ -36,7 +36,7 @@ const KnowledgeTransform: React.FC<KnowledgeTransformProps> = ({ title }) => {
 
         {/* Arrow/Transition */}
         <div className="flex flex-col items-center mx-4">
-          <div className="text-purple-400 text-5xl md:text-6xl font-bold animate-pulse mb-2">→</div>
+          <div className="text-purple-400 text-5xl md:text-6xl font-bold animate-pulse motion-reduce:animate-none mb-2">→</div>
           <span className="text-purple-300 text-sm font-medium">AI-powered transformation</span>
         </div>
 
