@@ -34,6 +34,7 @@ export const ContactForm = () => {
 
   const successMessageRef = useRef<HTMLParagraphElement>(null);
   const errorMessageRef = useRef<HTMLParagraphElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (successMessage && successMessageRef.current) {
@@ -125,6 +126,19 @@ export const ContactForm = () => {
     }
   };
 
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      message: '',
+      phoneNumber: '',
+    });
+    setErrors({});
+    setSuccessMessage(null);
+    setErrorMessage(null);
+    nameInputRef.current?.focus();
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
@@ -146,6 +160,7 @@ export const ContactForm = () => {
               disabled={loading}
               showCharCount={true}
               maxLength={50}
+              ref={nameInputRef} // Attach the ref here
             />
             <FormInput
               id="email"
@@ -190,9 +205,14 @@ export const ContactForm = () => {
             <div aria-live="polite" aria-atomic="true" className="sr-only">
               {loading ? 'Sending message...' : ''}
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Sending...' : 'Send Message'}
-            </Button>
+            <div className="flex space-x-4">
+              <Button type="submit" className="flex-1" disabled={loading}>
+                {loading ? 'Sending...' : 'Send Message'}
+              </Button>
+              <Button type="button" className="flex-1" onClick={resetForm} variant="outline" disabled={loading}>
+                Reset
+              </Button>
+            </div>
           </fieldset>
         </form>
       </CardContent>
