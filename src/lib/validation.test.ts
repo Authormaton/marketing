@@ -1,4 +1,4 @@
-import { required, email, minLength, maxLength, validate, Validator, isValidUrl } from './validation';
+import { required, email, minLength, maxLength, validate, Validator, isValidUrl, validatePasswordStrength } from './validation';
 
 describe('Validation Utilities', () => {
   // Test for 'required' validator
@@ -164,6 +164,45 @@ describe('Validation Utilities', () => {
     });
   });
 
+  // Test for 'validatePasswordStrength' validator
+  describe('validatePasswordStrength', () => {
+    it('should return "weak" for a password that is too short', () => {
+      expect(validatePasswordStrength('short')).toBe('weak');
+    });
+
+    it('should return "weak" for a password with only lowercase letters and too short', () => {
+      expect(validatePasswordStrength('abcdefg')).toBe('weak');
+    });
+
+    it('should return "weak" for a password with only lowercase letters and numbers', () => {
+      expect(validatePasswordStrength('abcdefg1')).toBe('weak');
+    });
+
+    it('should return "medium" for a password with length, lowercase, uppercase, and numbers', () => {
+      expect(validatePasswordStrength('Password123')).toBe('medium');
+    });
+
+    it('should return "strong" for a password with length, lowercase, uppercase, numbers, and special characters', () => {
+      expect(validatePasswordStrength('Password123!')).toBe('strong');
+    });
+
+    it('should return "medium" for a password with length, lowercase, uppercase', () => {
+      expect(validatePasswordStrength('Abcdefgh')).toBe('medium');
+    });
+
+    it('should return "medium" for a password with length, lowercase, numbers, special character', () => {
+      expect(validatePasswordStrength('abcdefg1!')).toBe('medium');
+    });
+
+    it('should return "weak" for an empty string', () => {
+      expect(validatePasswordStrength('')).toBe('weak');
+    });
+
+    it('should return "weak" for a password with only spaces', () => {
+      expect(validatePasswordStrength('        ')).toBe('weak');
+    });
+  });
+
   // Test for 'validate' utility
   describe('validate', () => {
     it('should return undefined if no validators are provided', () => {
@@ -203,7 +242,5 @@ describe('Validation Utilities', () => {
       expect(validate('Password', validators)).toBe('Must contain a number.');
       expect(validate('Password123', validators)).toBeUndefined();
     });
-
-
   });
 });
