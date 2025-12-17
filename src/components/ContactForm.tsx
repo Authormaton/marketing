@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { FormInput } from '@/components/ui/FormInput';
 import { FormTextarea } from '@/components/ui/FormTextarea';
 import { required, email, minLength, maxLength, isPhoneNumber, validate, Validator } from '@/lib/validation';
+import { useToast } from '@/hooks/useToast'; // Added import for useToast
 
 interface FormData {
   name: string;
@@ -21,6 +22,7 @@ interface FormErrors {
 }
 
 export const ContactForm = () => {
+  const { toast } = useToast(); // Initialize useToast hook
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -29,32 +31,13 @@ export const ContactForm = () => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const successMessageRef = useRef<HTMLParagraphElement>(null);
-  const errorMessageRef = useRef<HTMLParagraphElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (successMessage && successMessageRef.current) {
-      successMessageRef.current.focus();
-    }
-  }, [successMessage]);
-
-  useEffect(() => {
-    if (errorMessage && errorMessageRef.current) {
-      errorMessageRef.current.focus();
-    }
-  }, [errorMessage]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
     // Clear error when user starts typing again
     setErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
-    setSuccessMessage(null);
-    setErrorMessage(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -92,8 +75,7 @@ export const ContactForm = () => {
 
     if (Object.values(newErrors).some(Boolean)) {
       setLoading(false);
-      setErrorMessage('Please correct the errors in the form.');
-      setSuccessMessage(null);
+      toast({title: 'Validation Error', description: 'Please correct the errors in the form.', variant: 'destructive'});
       return;
     }
 
@@ -109,8 +91,7 @@ export const ContactForm = () => {
           }
         }, 1500);
       });
-      setSuccessMessage('Your message has been sent successfully!');
-      setErrorMessage(null);
+      toast({title: 'Success', description: 'Your message has been sent successfully!', variant: 'success'});
       setFormData({
         name: '',
         email: '',
@@ -119,8 +100,7 @@ export const ContactForm = () => {
       setErrors({});
     } catch (error) {
       console.error('Form submission error:', error);
-      setErrorMessage('There was an error sending your message. Please try again.');
-      setSuccessMessage(null);
+      toast({title: 'Error', description: 'There was an error sending your message. Please try again.', variant: 'destructive'});
     } finally {
       setLoading(false);
     }
@@ -134,8 +114,6 @@ export const ContactForm = () => {
       phoneNumber: '',
     });
     setErrors({});
-    setSuccessMessage(null);
-    setErrorMessage(null);
     nameInputRef.current?.focus();
   };
 
