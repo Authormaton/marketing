@@ -8,6 +8,9 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [isExplicitPause, setIsExplicitPause] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
 
   const setHelpVisible = (visible: boolean, source: 'keyboard' | 'close_button' | 'onboarding') => {
     setShowHelp(visible);
@@ -162,10 +165,48 @@ const WritingDemo = ({ loading = false }: { loading?: boolean }) => {
             e.preventDefault();
             setHelpVisible(!showHelp, 'keyboard');
             break;
-          default:
-            break;
-        }
-      }}
+          default:\
+            break;\
+        }\
+      }}\
+      onTouchStart={(e) => {\
+        if (loading) return;\
+        touchStartX.current = e.touches[0].clientX;\
+      }}\
+      onTouchMove={(e) => {\
+        if (loading) return;\
+        // Prevent scrolling while swiping\
+        e.preventDefault();\
+        touchEndX.current = e.touches[0].clientX;\
+      }}\
+      onTouchEnd={() => {\
+        if (loading) return;\
+        const swipeDistance = touchStartX.current - touchEndX.current;\
+        const minSwipeDistance = 50; // Minimum pixels to register a swipe\
+\
+        if (Math.abs(swipeDistance) > minSwipeDistance) {\
+          const fromSlide = currentSlide;\
+          let newSlide;\
+          let direction;\
+\
+          if (swipeDistance > 0) { // Swiped left (moved finger from right to left)\
+            newSlide = (currentSlide + 1) % slides.length;\
+            direction = 'left_swipe';\
+          } else { // Swiped right (moved finger from left to right)\
+            newSlide = (currentSlide - 1 + slides.length) % slides.length;\
+            direction = 'right_swipe';\
+          }\
+          setCurrentSlide(newSlide);\
+          setIsPaused(true);\
+          if (!isExplicitPause) {\
+            scheduleResume();\
+          }\
+          customEvent('slide_navigation', { direction, from_slide: fromSlide, to_slide: newSlide });\
+        }\
+        // Reset touch positions\
+        touchStartX.current = 0;\
+        touchEndX.current = 0;\
+      }}\
       aria-label="Writing Demo"
       role="region"
     >
